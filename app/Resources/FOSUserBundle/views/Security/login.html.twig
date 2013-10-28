@@ -1,0 +1,33 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+
+<form action="{{ path("fos_user_security_check") }}" method="post" id="login_form">
+    <div class="top_b">Sign in to {{app_name}}</div>
+    {% if error %}
+    <div class="alert alert-info alert-login">
+        <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
+    </div>
+    {% endif %}
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+    <div class="cnt_b">
+        <div class="formRow">
+            <div class="input-prepend">
+                <span class="add-on"><i class="icon-user"></i></span><input type="text" id="username" name="_username" placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}" value="{{ last_username }}" required="required"/>
+            </div>
+        </div>
+        <div class="formRow">
+            <div class="input-prepend">
+                <span class="add-on"><i class="icon-lock"></i></span><input type="password" id="password" name="_password" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}" required="required"/>
+            </div>
+        </div>
+        <div class="formRow clearfix">
+            <label class="checkbox"><input type="checkbox" id="remember_me" name="_remember_me" value="on"/> {{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
+        </div>
+    </div>
+    <div class="btm_b clearfix">
+        <button class="btn btn-inverse pull-right" type="submit" id="_submit" name="_submit">{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}</button>
+        {# <span class="link_reg"><a href="#reg_form">Not registered? Sign up here</a></span> #}
+    </div>
+</form>
+{% endblock fos_user_content %}

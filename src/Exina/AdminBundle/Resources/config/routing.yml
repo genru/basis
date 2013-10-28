@@ -1,0 +1,3 @@
+exina_admin_homepage:
+    pattern:  /
+    defaults: { _controller: ExinaAdminBundle:Default:index }

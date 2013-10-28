@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="default" namespace="Acme\DemoBundle\Model" defaultIdMethod="native">
+    <behavior name="timestampable" />
+
+    <table name="basis_key" phpName="Key">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+        <column name="productkey" type="varchar" size="255" primaryString="true" />
+        <column name="product_id" type="INTEGER" required="true" primaryKey="true" />
+        <column name="order_id" type="INTEGER" required="false" primaryKey="true" />
+        <column name="host_id" type="INTEGER" required="false" primaryKey="true" />
+        <foreign-key foreignTable="basis_product">
+            <reference local="product_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="basis_order">
+            <reference local="order_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="basis_host">
+            <reference local="host_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="basis_product" phpName="Product">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+        <column name="name" type="varchar" size="255" primaryString="true" />
+    </table>
+
+    <table name="basis_customer" phpName="Customer">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+        <column name="name" type="varchar" size="255" primaryString="true" />
+        <column name="email" type="varchar" size="255" />
+        <column name="organization" type="varchar" size="255" />
+    </table>
+
+    <table name="basis_order" phpName="Order">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+        <column name="agent" type="varchar" size="255" primaryString="true" />
+        <column name="trans_id" type="varchar" size="255" />
+        <column name="state" type="enum" valueSet="PAID,PENDING,REFUNDED,CANCELLED" />
+        <column name="customer_id" type="INTEGER" required="true" primaryKey="true" />
+        <foreign-key foreignTable="basis_customer">
+            <reference local="customer_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="basis_host" phpName="Host">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+        <column name="fingerprint" type="varchar" size="255" primaryString="true" />
+    </table>
+
+</database>

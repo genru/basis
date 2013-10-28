@@ -1,0 +1,7 @@
+parameters:
+#    exina_admin.example.class: Exina\AdminBundle\Example
+
+services:
+#    exina_admin.example:
+#        class: %exina_admin.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

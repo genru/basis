@@ -4,7 +4,7 @@ imports:
 
 framework:
     #esi:             ~
-    #translator:      { fallback: %locale% }
+    translator:      { fallback: %locale% }
     secret:          %secret%
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -25,6 +25,9 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+    globals:
+        app_ver:    "%app_version%"
+        app_name:   "%app_name%"
 
 # Assetic Configuration
 assetic:
@@ -64,3 +67,17 @@ swiftmailer:
     username:  %mailer_user%
     password:  %mailer_password%
     spool:     { type: memory }
+
+propel:
+    dbal:
+        driver:               %database_driver%
+        user:                 %database_user%
+        password:             %database_password%
+        dsn:                  %database_driver%:host=%database_host%;dbname=%database_name%;charset=UTF8
+        options:              {}
+        attributes:           {}
+
+fos_user:
+    db_driver: propel # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: FOS\UserBundle\Propel\User
