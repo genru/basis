@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class HostType extends BaseAbstractType
 {
     protected $options = array(
-        'data_class' => 'Acme\DemoBundle\Model\Host',
+        'data_class' => 'Exina\AdminBundle\Model\Host',
         'name'       => 'host',
     );
 

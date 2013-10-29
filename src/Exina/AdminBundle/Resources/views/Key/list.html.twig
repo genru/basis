@@ -1,0 +1,70 @@
+{% extends '::base.html.twig' %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- sortable/filterable list -->
+    <script src='{{asset("lib/datatables/jquery.dataTables.min.js")}}'></script>
+    <script src='{{asset("lib/datatables/jquery.dataTables.bootstrap.min.js")}}'></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tab_list').dataTable({
+                "sDom": "<'row'<'span6'<'dt_actions'>l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+                "sPaginationType": "bootstrap_alt",
+                "oLanguage": {
+                    "sLengthMenu": "_MENU_ records per page"
+                },
+            });
+        })
+    </script>
+{% endblock %}
+
+
+{% block heading %}
+Keys
+{% endblock %}
+
+
+{% block body %}
+
+<div class="row-fluid">
+<div class="span12">
+    {% for error in errors %}
+        <div class="alert alert-error">
+            <a class="close" data-dismiss="alert">&times;</a>{{ error.message }}
+        </div>
+    {% endfor %}
+
+    <table class="table table-hover table-bordered" id="tab_list">
+        <thead>
+        <tr>
+            <th>key</th>
+            <th>product</th>
+            <th>order</th>
+            <th>host</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for key in keys %}
+                <tr>
+                    <td><a href="{{path('ex_admin_key_update', {'id':key.id})}}" title="see details"> {{key.ProductKey}}</a></a></td>
+                    <td>{{key.product}}</td>
+                    <td>
+                        {{key.order}}
+                        {# {{ key.order.getCreatedAt('Y-m-d H:m:i') }} #}
+                    </td>
+                    <td>
+                        {{key.host}}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{path('ex_admin_key_new')}}" class="btn btn-gebo" title="create new key"> <i class="icon-plus icon-white"></i> Add new </a>
+
+</div> <!-- end span12 -->
+
+</div>
+
+{% endblock %}

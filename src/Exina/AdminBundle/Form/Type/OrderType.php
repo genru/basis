@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class OrderType extends BaseAbstractType
 {
     protected $options = array(
-        'data_class' => 'Acme\DemoBundle\Model\Order',
+        'data_class' => 'Exina\AdminBundle\Model\Order',
         'name'       => 'order',
     );
 

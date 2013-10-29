@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class KeyType extends BaseAbstractType
 {
     protected $options = array(
-        'data_class' => 'Acme\DemoBundle\Model\Key',
+        'data_class' => 'Exina\AdminBundle\Model\Key',
         'name'       => 'key',
     );
 
@@ -17,8 +17,8 @@ class KeyType extends BaseAbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('productkey');
-        $builder->add('createdAt');
-        $builder->add('updatedAt');
+        $builder->add('productKey');
+        $builder->add('createdAt', 'hidden');
+        $builder->add('updatedAt', 'hidden');
     }
 }

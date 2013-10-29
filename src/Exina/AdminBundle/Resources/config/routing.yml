@@ -1,3 +1,17 @@
 exina_admin_homepage:
     pattern:  /
     defaults: { _controller: ExinaAdminBundle:Default:index }
+ex_admin_key_home:
+    pattern: /key/
+    defaults: {_controller: ExinaAdminBundle:Key:list }
+ex_admin_key_list:
+    pattern: /key/
+    defaults: {_controller: ExinaAdminBundle:Key:list }
+ex_admin_key_new:
+    pattern: /key/new
+    defaults: {_controller: ExinaAdminBundle:key:create }
+ex_admin_key_update:
+    pattern: /key/update/{id}
+    defaults: { _controller: ExinaAdminBundle:key:update }
+    requirements:
+        id: \d+

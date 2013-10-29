@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<database name="default" namespace="Acme\DemoBundle\Model" defaultIdMethod="native">
+<database name="default" namespace="Exina\AdminBundle\Model" defaultIdMethod="native">
     <behavior name="timestampable" />
 
     <table name="basis_key" phpName="Key">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-        <column name="productkey" type="varchar" size="255" primaryString="true" />
-        <column name="product_id" type="INTEGER" required="true" primaryKey="true" />
-        <column name="order_id" type="INTEGER" required="false" primaryKey="true" />
-        <column name="host_id" type="INTEGER" required="false" primaryKey="true" />
+        <column name="product_key" type="varchar" size="255" />
+        <column name="product_id" type="INTEGER" required="true" />
+        <column name="order_id" type="INTEGER" required="false" />
+        <column name="host_id" type="INTEGER" required="false" />
         <foreign-key foreignTable="basis_product">
             <reference local="product_id" foreign="id"/>
         </foreign-key>

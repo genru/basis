@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class ProductType extends BaseAbstractType
 {
     protected $options = array(
-        'data_class' => 'Acme\DemoBundle\Model\Product',
+        'data_class' => 'Exina\AdminBundle\Model\Product',
         'name'       => 'product',
     );
 

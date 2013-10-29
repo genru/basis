@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class CustomerType extends BaseAbstractType
 {
     protected $options = array(
-        'data_class' => 'Acme\DemoBundle\Model\Customer',
+        'data_class' => 'Exina\AdminBundle\Model\Customer',
         'name'       => 'customer',
     );
 
