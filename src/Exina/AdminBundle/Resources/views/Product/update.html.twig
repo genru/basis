@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block heading %}
-Keys
+Products
 {% endblock %}
 
 {% block body %}
@@ -29,12 +29,12 @@ Keys
                 <a class="close" data-dismiss="alert">&times;</a>{{ error.message }}
             </div>
         {% endfor %}
-    <form action="{{ path('ex_admin_key_new') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('ex_admin_product_update', {'id':product.id}) }}" method="post" {{ form_enctype(form) }}>
         <!-- {{ form_errors(form) }} -->
         <!-- render remaining fields in form -->
-        {{ form(form) }}
-        <button id="submit-btn" type="SUBMIT" class="btn btn-gebo" data-loading-text="Saving..."><i class="icon-ok icon-white"></i> Add</button>
-        <a href="{{ path('ex_admin_key_home') }}" class="btn btn-link"> Cancel</a>
+        {{form_rest(form) }}
+        <button id="submit-btn" type="SUBMIT" class="btn btn-gebo" data-loading-text="Saving..."><i class="icon-ok icon-white"></i> Update</button>
+        <a href="{{ path('ex_admin_product_home') }}" class="btn btn-link"> Cancel</a>
     </form>
     </div>
     </div>

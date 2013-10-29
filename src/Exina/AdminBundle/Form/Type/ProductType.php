@@ -18,7 +18,7 @@ class ProductType extends BaseAbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name');
-        $builder->add('createdAt');
-        $builder->add('updatedAt');
+        $builder->add('createdAt', 'hidden');
+        $builder->add('updatedAt', 'hidden');
     }
 }

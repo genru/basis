@@ -22,7 +22,7 @@
 
 
 {% block heading %}
-Keys
+Products
 {% endblock %}
 
 
@@ -39,29 +39,20 @@ Keys
     <table class="table table-hover table-bordered" id="tab_list">
         <thead>
         <tr>
-            <th>key</th>
             <th>product</th>
-            <th>order</th>
-            <th>host</th>
         </tr>
         </thead>
         <tbody>
-            {% for key in keys %}
+            {% for product in products %}
                 <tr>
-                    <td><a href="{{path('ex_admin_key_update', {'id':key.id})}}" title="see details"> {{key.ProductKey}}</a></td>
-                    <td>{{key.product}}</td>
                     <td>
-                        {{key.order}}
-                        {# {{ key.order.getCreatedAt('Y-m-d H:m:i') }} #}
-                    </td>
-                    <td>
-                        {{key.host}}
+                        <a href="{{path('ex_admin_product_update', {'id':product.id})}}" title="see details"> {{product.name}}</a>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{path('ex_admin_key_new')}}" class="btn btn-gebo" title="create new key"> <i class="icon-plus icon-white"></i> Add new </a>
+    <a href="{{path('ex_admin_product_new')}}" class="btn btn-gebo" title="create new product"> <i class="icon-plus icon-white"></i> Add new </a>
 
 </div> <!-- end span12 -->
 

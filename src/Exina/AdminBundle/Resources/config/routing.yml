@@ -9,9 +9,24 @@ ex_admin_key_list:
     defaults: {_controller: ExinaAdminBundle:Key:list }
 ex_admin_key_new:
     pattern: /key/new
-    defaults: {_controller: ExinaAdminBundle:key:create }
+    defaults: {_controller: ExinaAdminBundle:Key:create }
 ex_admin_key_update:
     pattern: /key/update/{id}
-    defaults: { _controller: ExinaAdminBundle:key:update }
+    defaults: { _controller: ExinaAdminBundle:Key:update }
+    requirements:
+        id: \d+
+
+ex_admin_product_home:
+    pattern: /product/
+    defaults: {_controller: ExinaAdminBundle:Product:list }
+ex_admin_product_list:
+    pattern: /product/
+    defaults: {_controller: ExinaAdminBundle:Product:list }
+ex_admin_product_new:
+    pattern: /product/new
+    defaults: {_controller: ExinaAdminBundle:Product:create }
+ex_admin_product_update:
+    pattern: /product/update/{id}
+    defaults: { _controller: ExinaAdminBundle:Product:update }
     requirements:
         id: \d+
