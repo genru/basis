@@ -22,7 +22,7 @@
 
 
 {% block heading %}
-Products
+Orders
 {% endblock %}
 
 
@@ -39,22 +39,32 @@ Products
     <table class="table table-hover table-bordered" id="tab_list">
         <thead>
         <tr>
+            <th>transaction</th>
             <th>product</th>
-            <th>created at</th>
+            <th>agent</th>
+            <th>state</th>
+            <th>customer</th>
+            <th>create at</th>
         </tr>
         </thead>
         <tbody>
-            {% for product in products %}
+            {% for order in orders %}
                 <tr>
+                    <td><a href="{{path('ex_admin_order_update', {'id':order.id})}}" title="see details"> {{order.transid}}</a></td>
+                    <td><a href="{{path('ex_admin_product_update', {'id':order.product.id})}}" title="see details"> {{order.product}}</a></td>
                     <td>
-                        <a href="{{path('ex_admin_product_update', {'id':product.id})}}" title="see details"> {{product.name}}</a>
+                        {{order.agent}}
                     </td>
-                    <td>{{ product.CreatedAt('Y-m-d H:m:i') }}</td>
+                    <td>
+                        {{order.state}}
+                    </td>
+                    <td><a href="{{path('ex_admin_customer_update', {'id':order.customer.id})}}" title="see details">{{order.customer}}</a></td>
+                    <td>{{ order.CreatedAt('Y-m-d H:m:i') }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{path('ex_admin_product_new')}}" class="btn btn-gebo" title="create new product"> <i class="icon-plus icon-white"></i> Add new </a>
+    <a href="{{path('ex_admin_order_new')}}" class="btn btn-gebo" title="create new order"> <i class="icon-plus icon-white"></i> Add new </a>
 
 </div> <!-- end span12 -->
 

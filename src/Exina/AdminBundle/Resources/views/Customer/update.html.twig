@@ -1,0 +1,41 @@
+{% extends '::base.html.twig' %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $('#submit-btn').click(function(e) {
+                var $btn = $(this);
+                $btn.button('loading');
+                setTimeout(function() {
+                   $btn.button('reset');
+                }, 5000);
+            });
+        })
+
+    </script>
+{% endblock %}
+
+{% block heading %}
+Customers
+{% endblock %}
+
+{% block body %}
+
+    <div class="row-fluid">
+    <div class="span12">
+        {% for error in errors %}
+            <div class="alert alert-error">
+                <a class="close" data-dismiss="alert">&times;</a>{{ error.message }}
+            </div>
+        {% endfor %}
+    <form action="{{ path('ex_admin_customer_update', {'id':customer.id}) }}" method="post" {{ form_enctype(form) }}>
+        <!-- {{ form_errors(form) }} -->
+        <!-- render remaining fields in form -->
+        {{form_rest(form) }}
+        <button id="submit-btn" type="SUBMIT" class="btn btn-gebo" data-loading-text="Saving..."><i class="icon-ok icon-white"></i> Update</button>
+        <a href="{{ path('ex_admin_customer_home') }}" class="btn btn-link"> Cancel</a>
+    </form>
+    </div>
+    </div>
+{% endblock %}

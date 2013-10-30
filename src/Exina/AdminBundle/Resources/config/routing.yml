@@ -40,3 +40,63 @@ ex_admin_product_delete:
     defaults: { _controller: ExinaAdminBundle:Product:delete }
     requirements:
         id: \d+
+
+ex_admin_customer_home:
+    pattern: /customer/
+    defaults: {_controller: ExinaAdminBundle:Customer:list }
+ex_admin_customer_list:
+    pattern: /customer/
+    defaults: {_controller: ExinaAdminBundle:Customer:list }
+ex_admin_customer_new:
+    pattern: /customer/new
+    defaults: {_controller: ExinaAdminBundle:Customer:create }
+ex_admin_customer_update:
+    pattern: /customer/update/{id}
+    defaults: { _controller: ExinaAdminBundle:Customer:update }
+    requirements:
+        id: \d+
+ex_admin_customer_delete:
+    pattern: /customer/delete/{id}
+    defaults: { _controller: ExinaAdminBundle:Customer:delete }
+    requirements:
+        id: \d+
+
+ex_admin_order_home:
+    pattern: /order/
+    defaults: {_controller: ExinaAdminBundle:Order:list }
+ex_admin_order_list:
+    pattern: /order/
+    defaults: {_controller: ExinaAdminBundle:Order:list }
+ex_admin_order_new:
+    pattern: /order/new
+    defaults: {_controller: ExinaAdminBundle:Order:create }
+ex_admin_order_update:
+    pattern: /order/update/{id}
+    defaults: { _controller: ExinaAdminBundle:Order:update }
+    requirements:
+        id: \d+
+ex_admin_order_delete:
+    pattern: /order/delete/{id}
+    defaults: { _controller: ExinaAdminBundle:Order:delete }
+    requirements:
+        id: \d+
+
+ex_admin_host_home:
+    pattern: /host/
+    defaults: {_controller: ExinaAdminBundle:Host:list }
+ex_admin_host_list:
+    pattern: /host/
+    defaults: {_controller: ExinaAdminBundle:Host:list }
+ex_admin_host_new:
+    pattern: /host/new
+    defaults: {_controller: ExinaAdminBundle:Host:create }
+ex_admin_host_update:
+    pattern: /host/update/{id}
+    defaults: { _controller: ExinaAdminBundle:Host:update }
+    requirements:
+        id: \d+
+ex_admin_host_delete:
+    pattern: /host/delete/{id}
+    defaults: { _controller: ExinaAdminBundle:Host:delete }
+    requirements:
+        id: \d+

@@ -22,7 +22,7 @@
 
 
 {% block heading %}
-Products
+Keys
 {% endblock %}
 
 
@@ -39,22 +39,20 @@ Products
     <table class="table table-hover table-bordered" id="tab_list">
         <thead>
         <tr>
-            <th>product</th>
-            <th>created at</th>
+            <th>fingerprint</th>
+            <th>create at</th>
         </tr>
         </thead>
         <tbody>
-            {% for product in products %}
+            {% for host in hosts %}
                 <tr>
-                    <td>
-                        <a href="{{path('ex_admin_product_update', {'id':product.id})}}" title="see details"> {{product.name}}</a>
-                    </td>
-                    <td>{{ product.CreatedAt('Y-m-d H:m:i') }}</td>
+                    <td><a href="{{path('ex_admin_host_update', {'id':host.id})}}" title="see details"> {{host.fingerprint}}</a></td>
+                    <td>{{ host.CreatedAt('Y-m-d H:m:i') }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{path('ex_admin_product_new')}}" class="btn btn-gebo" title="create new product"> <i class="icon-plus icon-white"></i> Add new </a>
+    <a href="{{path('ex_admin_host_new')}}" class="btn btn-gebo" title="create new host"> <i class="icon-plus icon-white"></i> Add new </a>
 
 </div> <!-- end span12 -->
 

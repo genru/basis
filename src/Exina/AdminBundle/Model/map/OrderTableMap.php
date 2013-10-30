@@ -44,8 +44,8 @@ class OrderTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('agent', 'Agent', 'VARCHAR', false, 255, null);
-        $this->getColumn('agent', false)->setPrimaryString(true);
         $this->addColumn('trans_id', 'TransId', 'VARCHAR', false, 255, null);
+        $this->getColumn('trans_id', false)->setPrimaryString(true);
         $this->addColumn('state', 'State', 'ENUM', false, null, null);
         $this->getColumn('state', false)->setValueSet(array (
   0 => 'PAID',
@@ -53,7 +53,8 @@ class OrderTableMap extends TableMap
   2 => 'REFUNDED',
   3 => 'CANCELLED',
 ));
-        $this->addForeignPrimaryKey('customer_id', 'CustomerId', 'INTEGER' , 'basis_customer', 'id', true, null, null);
+        $this->addForeignKey('customer_id', 'CustomerId', 'INTEGER', 'basis_customer', 'id', true, null, null);
+        $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'basis_product', 'id', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         // validators
@@ -65,6 +66,7 @@ class OrderTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Customer', 'Exina\\AdminBundle\\Model\\Customer', RelationMap::MANY_TO_ONE, array('customer_id' => 'id', ), null, null);
+        $this->addRelation('Product', 'Exina\\AdminBundle\\Model\\Product', RelationMap::MANY_TO_ONE, array('product_id' => 'id', ), null, null);
         $this->addRelation('Key', 'Exina\\AdminBundle\\Model\\Key', RelationMap::ONE_TO_MANY, array('id' => 'order_id', ), null, null, 'Keys');
     } // buildRelations()
 

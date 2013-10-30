@@ -17,6 +17,8 @@ use \PropelObjectCollection;
 use \PropelPDO;
 use Exina\AdminBundle\Model\Key;
 use Exina\AdminBundle\Model\KeyQuery;
+use Exina\AdminBundle\Model\Order;
+use Exina\AdminBundle\Model\OrderQuery;
 use Exina\AdminBundle\Model\Product;
 use Exina\AdminBundle\Model\ProductPeer;
 use Exina\AdminBundle\Model\ProductQuery;
@@ -73,6 +75,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
     protected $collKeysPartial;
 
     /**
+     * @var        PropelObjectCollection|Order[] Collection to store aggregation of Order objects.
+     */
+    protected $collOrders;
+    protected $collOrdersPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -97,6 +105,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $keysScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ordersScheduledForDeletion = null;
 
     /**
      * Get the [id] column value.
@@ -397,6 +411,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
             $this->collKeys = null;
 
+            $this->collOrders = null;
+
         } // if (deep)
     }
 
@@ -543,6 +559,23 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
             if ($this->collKeys !== null) {
                 foreach ($this->collKeys as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ordersScheduledForDeletion !== null) {
+                if (!$this->ordersScheduledForDeletion->isEmpty()) {
+                    OrderQuery::create()
+                        ->filterByPrimaryKeys($this->ordersScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ordersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrders !== null) {
+                foreach ($this->collOrders as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -717,6 +750,14 @@ abstract class BaseProduct extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collOrders !== null) {
+                    foreach ($this->collOrders as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -806,6 +847,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if ($includeForeignObjects) {
             if (null !== $this->collKeys) {
                 $result['Keys'] = $this->collKeys->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collOrders) {
+                $result['Orders'] = $this->collOrders->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -976,6 +1020,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getOrders() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrder($relObj->copy($deepCopy));
+                }
+            }
+
             //unflag object copy
             $this->startCopy = false;
         } // if ($deepCopy)
@@ -1039,6 +1089,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
     {
         if ('Key' == $relationName) {
             $this->initKeys();
+        }
+        if ('Order' == $relationName) {
+            $this->initOrders();
         }
     }
 
@@ -1318,6 +1371,256 @@ abstract class BaseProduct extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collOrders collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Product The current object (for fluent API support)
+     * @see        addOrders()
+     */
+    public function clearOrders()
+    {
+        $this->collOrders = null; // important to set this to null since that means it is uninitialized
+        $this->collOrdersPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collOrders collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialOrders($v = true)
+    {
+        $this->collOrdersPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrders collection.
+     *
+     * By default this just sets the collOrders collection to an empty array (like clearcollOrders());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrders($overrideExisting = true)
+    {
+        if (null !== $this->collOrders && !$overrideExisting) {
+            return;
+        }
+        $this->collOrders = new PropelObjectCollection();
+        $this->collOrders->setModel('Order');
+    }
+
+    /**
+     * Gets an array of Order objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Product is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Order[] List of Order objects
+     * @throws PropelException
+     */
+    public function getOrders($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdersPartial && !$this->isNew();
+        if (null === $this->collOrders || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrders) {
+                // return empty collection
+                $this->initOrders();
+            } else {
+                $collOrders = OrderQuery::create(null, $criteria)
+                    ->filterByProduct($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdersPartial && count($collOrders)) {
+                      $this->initOrders(false);
+
+                      foreach ($collOrders as $obj) {
+                        if (false == $this->collOrders->contains($obj)) {
+                          $this->collOrders->append($obj);
+                        }
+                      }
+
+                      $this->collOrdersPartial = true;
+                    }
+
+                    $collOrders->getInternalIterator()->rewind();
+
+                    return $collOrders;
+                }
+
+                if ($partial && $this->collOrders) {
+                    foreach ($this->collOrders as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrders[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrders = $collOrders;
+                $this->collOrdersPartial = false;
+            }
+        }
+
+        return $this->collOrders;
+    }
+
+    /**
+     * Sets a collection of Order objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $orders A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Product The current object (for fluent API support)
+     */
+    public function setOrders(PropelCollection $orders, PropelPDO $con = null)
+    {
+        $ordersToDelete = $this->getOrders(new Criteria(), $con)->diff($orders);
+
+
+        $this->ordersScheduledForDeletion = $ordersToDelete;
+
+        foreach ($ordersToDelete as $orderRemoved) {
+            $orderRemoved->setProduct(null);
+        }
+
+        $this->collOrders = null;
+        foreach ($orders as $order) {
+            $this->addOrder($order);
+        }
+
+        $this->collOrders = $orders;
+        $this->collOrdersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Order objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Order objects.
+     * @throws PropelException
+     */
+    public function countOrders(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdersPartial && !$this->isNew();
+        if (null === $this->collOrders || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrders) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrders());
+            }
+            $query = OrderQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByProduct($this)
+                ->count($con);
+        }
+
+        return count($this->collOrders);
+    }
+
+    /**
+     * Method called to associate a Order object to this object
+     * through the Order foreign key attribute.
+     *
+     * @param    Order $l Order
+     * @return Product The current object (for fluent API support)
+     */
+    public function addOrder(Order $l)
+    {
+        if ($this->collOrders === null) {
+            $this->initOrders();
+            $this->collOrdersPartial = true;
+        }
+
+        if (!in_array($l, $this->collOrders->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddOrder($l);
+
+            if ($this->ordersScheduledForDeletion and $this->ordersScheduledForDeletion->contains($l)) {
+                $this->ordersScheduledForDeletion->remove($this->ordersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Order $order The order object to add.
+     */
+    protected function doAddOrder($order)
+    {
+        $this->collOrders[]= $order;
+        $order->setProduct($this);
+    }
+
+    /**
+     * @param	Order $order The order object to remove.
+     * @return Product The current object (for fluent API support)
+     */
+    public function removeOrder($order)
+    {
+        if ($this->getOrders()->contains($order)) {
+            $this->collOrders->remove($this->collOrders->search($order));
+            if (null === $this->ordersScheduledForDeletion) {
+                $this->ordersScheduledForDeletion = clone $this->collOrders;
+                $this->ordersScheduledForDeletion->clear();
+            }
+            $this->ordersScheduledForDeletion[]= clone $order;
+            $order->setProduct(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Product is new, it will return
+     * an empty collection; or if this Product has previously
+     * been saved, it will retrieve related Orders from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Product.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Order[] List of Order objects
+     */
+    public function getOrdersJoinCustomer($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrderQuery::create(null, $criteria);
+        $query->joinWith('Customer', $join_behavior);
+
+        return $this->getOrders($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -1353,6 +1656,11 @@ abstract class BaseProduct extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collOrders) {
+                foreach ($this->collOrders as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
@@ -1361,6 +1669,10 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $this->collKeys->clearIterator();
         }
         $this->collKeys = null;
+        if ($this->collOrders instanceof PropelCollection) {
+            $this->collOrders->clearIterator();
+        }
+        $this->collOrders = null;
     }
 
     /**

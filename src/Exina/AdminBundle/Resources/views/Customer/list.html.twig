@@ -22,7 +22,7 @@
 
 
 {% block heading %}
-Products
+Customers
 {% endblock %}
 
 
@@ -39,22 +39,28 @@ Products
     <table class="table table-hover table-bordered" id="tab_list">
         <thead>
         <tr>
-            <th>product</th>
-            <th>created at</th>
+            <th>name</th>
+            <th>email</th>
+            <th>organization</th>
+            <th>create at</th>
         </tr>
         </thead>
         <tbody>
-            {% for product in products %}
+            {% for customer in customers %}
                 <tr>
+                    <td><a href="{{path('ex_admin_customer_update', {'id':customer.id})}}" title="see details"> {{customer.name}}</a></td>
                     <td>
-                        <a href="{{path('ex_admin_product_update', {'id':product.id})}}" title="see details"> {{product.name}}</a>
+                        {{customer.email}}
                     </td>
-                    <td>{{ product.CreatedAt('Y-m-d H:m:i') }}</td>
+                    <td>
+                        {{customer.organization}}
+                    </td>
+                    <td>{{ customer.CreatedAt('Y-m-d H:m:i') }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{path('ex_admin_product_new')}}" class="btn btn-gebo" title="create new product"> <i class="icon-plus icon-white"></i> Add new </a>
+    <a href="{{path('ex_admin_customer_new')}}" class="btn btn-gebo" title="create new customer"> <i class="icon-plus icon-white"></i> Add new </a>
 
 </div> <!-- end span12 -->
 

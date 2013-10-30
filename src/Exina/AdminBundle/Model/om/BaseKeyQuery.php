@@ -648,7 +648,7 @@ abstract class BaseKeyQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(KeyPeer::ORDER_ID, $order->toKeyValue('Id', 'Id'), $comparison);
+                ->addUsingAlias(KeyPeer::ORDER_ID, $order->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByOrder() only accepts arguments of type Order or PropelCollection');
         }

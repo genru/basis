@@ -12,6 +12,13 @@ class KeyType extends BaseAbstractType
         'name'       => 'key',
     );
 
+    private $update_form = false;
+
+    public function __construct($update_form = false)
+    {
+        $this->update_form = $update_form;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -23,17 +30,26 @@ class KeyType extends BaseAbstractType
             'property' => 'name',
             'multiple' => false,
             'attr' => array('data-placeholder' => '-')));
-        $builder->add('order', 'model', array(
-            'class' => 'Exina\AdminBundle\Model\Order',
-            'property' => 'trans_id',
-            'multiple' => false,
-            'attr' => array('data-placeholder' => '-'),));
-        $builder->add('host', 'model', array(
-            'class' => 'Exina\AdminBundle\Model\Host',
-            'property' => 'fingerprint',
-            'multiple' => false,
-            'attr' => array('data-placeholder' => '-'),));
-        $builder->add('createdAt', 'hidden');
-        $builder->add('updatedAt', 'hidden');
+        if($this->update_form)
+        {
+            $builder->add('order', 'model', array(
+                'class' => 'Exina\AdminBundle\Model\Order',
+                'property' => 'trans_id',
+                'multiple' => false,
+                'attr' => array('data-placeholder' => '-'),
+                'choices' => null,));
+            $builder->add('host', 'model', array(
+                'class' => 'Exina\AdminBundle\Model\Host',
+                'property' => 'fingerprint',
+                'multiple' => false,
+                'attr' => array('data-placeholder' => '-'),));
+            $builder->add('createdAt', 'datetime', array('widget'=>'single_text', 'read_only'=>true));
+            $builder->add('updatedAt', 'datetime', array('widget'=>'single_text', 'read_only'=>true));
+        }
+        else
+        {
+            $builder->add('createdAt', 'hidden');
+            $builder->add('updatedAt', 'hidden');
+        }
     }
 }

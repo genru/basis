@@ -58,11 +58,12 @@ class ProductController extends Controller
         if($product==null)
             throw new Exception("Error record not exist", 500);
 
-        $form = $this->createFormBuilder( $product)
-            ->add('name')
-            ->add('createdAt', 'datetime', array('widget'=>'single_text', 'read_only'=>true))
-            ->add('updatedAt', 'datetime', array('widget'=>'single_text', 'read_only'=>true))
-            ->getForm();
+        // $form = $this->createFormBuilder( $product)
+        //     ->add('name')
+        //     ->add('createdAt', 'datetime', array('widget'=>'single_text', 'read_only'=>true))
+        //     ->add('updatedAt', 'datetime', array('widget'=>'single_text', 'read_only'=>true))
+        //     ->getForm();
+        $form = $this->createForm(new ProductType(true), $product);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);

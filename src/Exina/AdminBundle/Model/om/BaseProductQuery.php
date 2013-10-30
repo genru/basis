@@ -13,6 +13,7 @@ use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
 use Exina\AdminBundle\Model\Key;
+use Exina\AdminBundle\Model\Order;
 use Exina\AdminBundle\Model\Product;
 use Exina\AdminBundle\Model\ProductPeer;
 use Exina\AdminBundle\Model\ProductQuery;
@@ -35,6 +36,10 @@ use Exina\AdminBundle\Model\ProductQuery;
  * @method ProductQuery leftJoinKey($relationAlias = null) Adds a LEFT JOIN clause to the query using the Key relation
  * @method ProductQuery rightJoinKey($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Key relation
  * @method ProductQuery innerJoinKey($relationAlias = null) Adds a INNER JOIN clause to the query using the Key relation
+ *
+ * @method ProductQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
+ * @method ProductQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
+ * @method ProductQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
  *
  * @method Product findOne(PropelPDO $con = null) Return the first Product matching the query
  * @method Product findOneOrCreate(PropelPDO $con = null) Return the first Product matching the query, or a new Product object populated from the query conditions when no match is found
@@ -470,6 +475,80 @@ abstract class BaseProductQuery extends ModelCriteria
         return $this
             ->joinKey($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Key', '\Exina\AdminBundle\Model\KeyQuery');
+    }
+
+    /**
+     * Filter the query by a related Order object
+     *
+     * @param   Order|PropelObjectCollection $order  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProductQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByOrder($order, $comparison = null)
+    {
+        if ($order instanceof Order) {
+            return $this
+                ->addUsingAlias(ProductPeer::ID, $order->getProductId(), $comparison);
+        } elseif ($order instanceof PropelObjectCollection) {
+            return $this
+                ->useOrderQuery()
+                ->filterByPrimaryKeys($order->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByOrder() only accepts arguments of type Order or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Order relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProductQuery The current query, for fluid interface
+     */
+    public function joinOrder($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Order');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Order');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Order relation Order object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \Exina\AdminBundle\Model\OrderQuery A secondary query class using the current class as primary query
+     */
+    public function useOrderQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOrder($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Order', '\Exina\AdminBundle\Model\OrderQuery');
     }
 
     /**

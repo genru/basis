@@ -12,13 +12,28 @@ class HostType extends BaseAbstractType
         'name'       => 'host',
     );
 
+    private $update_form = false;
+
+    public function __construct($update_form = false)
+    {
+        $this->update_form = $update_form;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('fingerprint');
-        $builder->add('createdAt');
-        $builder->add('updatedAt');
+        if($this->update_form)
+        {
+            $builder->add('createdAt', 'datetime', array('widget'=>'single_text', 'read_only'=>true));
+            $builder->add('updatedAt', 'datetime', array('widget'=>'single_text', 'read_only'=>true));
+        }
+        else
+        {
+            $builder->add('createdAt', 'hidden');
+            $builder->add('updatedAt', 'hidden');
+        }
     }
 }

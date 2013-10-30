@@ -52,11 +52,15 @@ Keys
                     <td><a href="{{path('ex_admin_key_update', {'id':key.id})}}" title="see details"> {{key.ProductKey}}</a></td>
                     <td><a href="{{path('ex_admin_product_update', {'id':key.product.id})}}" title="see details">{{key.product}}</a></td>
                     <td>
-                        {{key.order}}
+                        {% if key.order is not null %}
+                        <a href="{{path('ex_admin_order_update', {'id':key.order.id})}}" title="see details">{{key.order}}</a>
+                        {% endif %}
                         {# {{ key.order.getCreatedAt('Y-m-d H:m:i') }} #}
                     </td>
                     <td>
-                        {{key.host}}
+                        {% if key.host is not null %}
+                        <a href="{{path('ex_admin_host_update', {'id':key.host.id})}}" title="see details">{{key.host}}</a>
+                        {% endif %}
                     </td>
                     <td>{{ key.CreatedAt('Y-m-d H:m:i') }}</td>
                 </tr>

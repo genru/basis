@@ -1334,9 +1334,7 @@ abstract class BaseKey extends BaseObject implements Persistent
     public function getOrder(PropelPDO $con = null, $doQuery = true)
     {
         if ($this->aOrder === null && ($this->order_id !== null) && $doQuery) {
-            $this->aOrder = OrderQuery::create()
-                ->filterByKey($this) // here
-                ->findOne($con);
+            $this->aOrder = OrderQuery::create()->findPk($this->order_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

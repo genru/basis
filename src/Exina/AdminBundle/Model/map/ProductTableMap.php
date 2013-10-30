@@ -56,6 +56,7 @@ class ProductTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Key', 'Exina\\AdminBundle\\Model\\Key', RelationMap::ONE_TO_MANY, array('id' => 'product_id', ), null, null, 'Keys');
+        $this->addRelation('Order', 'Exina\\AdminBundle\\Model\\Order', RelationMap::ONE_TO_MANY, array('id' => 'product_id', ), null, null, 'Orders');
     } // buildRelations()
 
     /**

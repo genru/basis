@@ -33,12 +33,16 @@
 
     <table name="basis_order" phpName="Order">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-        <column name="agent" type="varchar" size="255" primaryString="true" />
-        <column name="trans_id" type="varchar" size="255" />
+        <column name="agent" type="varchar" size="255" />
+        <column name="trans_id" type="varchar" size="255" primaryString="true"/>
         <column name="state" type="enum" valueSet="PAID,PENDING,REFUNDED,CANCELLED" />
-        <column name="customer_id" type="INTEGER" required="true" primaryKey="true" />
+        <column name="customer_id" type="INTEGER" required="true" />
         <foreign-key foreignTable="basis_customer">
             <reference local="customer_id" foreign="id"/>
+        </foreign-key>
+        <column name="product_id" type="INTEGER" required="true" />
+        <foreign-key foreignTable="basis_product">
+            <reference local="product_id" foreign="id"/>
         </foreign-key>
     </table>
 
