@@ -1,7 +1,7 @@
     html {overflow-y: scroll}
     body {color: #222;padding: 0}
 
-	html,body {height:100%; font-family: "Microsoft Yahei"}
+	html,body {height:100%; font-family: "Microsoft Yahei", helvetica, arial, sans-serif}
 
     /* fix for inputs inline shadow */
 		input[type="text"], input[type="email"], input[type="search"], input[type="password"] {
