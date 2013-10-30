@@ -81,3 +81,23 @@ fos_user:
     db_driver: propel # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: FOS\UserBundle\Propel\User
+
+orderly_pay_pal_ipn:
+    # ... Rest of the configuration
+    # If set to false then service loads settings with "sandbox_" prefix
+    islive:  false
+
+    # Constants for the live environment (default settings in Configuration.php)
+    email:   genjuroa@ymail.com
+    url:     https://www.paypal.com/cgi-bin/webscr
+    debug:   %kernel.debug%
+
+    # Constants for the sandbox environment (default settings in Configuration.php)
+    sandbox_email:   genjuroa@ymail.com
+    sandbox_url:     https://www.sandbox.paypal.com/cgi-bin/webscr
+    sandbox_debug:   true
+
+    drivers:
+        orm:
+            object_manager: doctrine.orm.entity_manager
+            classes: ~
