@@ -43,13 +43,14 @@ Keys
             <th>product</th>
             <th>order</th>
             <th>host</th>
+            <th>create at</th>
         </tr>
         </thead>
         <tbody>
             {% for key in keys %}
                 <tr>
                     <td><a href="{{path('ex_admin_key_update', {'id':key.id})}}" title="see details"> {{key.ProductKey}}</a></td>
-                    <td>{{key.product}}</td>
+                    <td><a href="{{path('ex_admin_product_update', {'id':key.product.id})}}" title="see details">{{key.product}}</a></td>
                     <td>
                         {{key.order}}
                         {# {{ key.order.getCreatedAt('Y-m-d H:m:i') }} #}
@@ -57,6 +58,7 @@ Keys
                     <td>
                         {{key.host}}
                     </td>
+                    <td>{{ key.CreatedAt('Y-m-d H:m:i') }}</td>
                 </tr>
             {% endfor %}
         </tbody>

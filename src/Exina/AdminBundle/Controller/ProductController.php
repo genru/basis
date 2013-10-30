@@ -81,4 +81,12 @@ class ProductController extends Controller
                 'errors' => $errors, 'product'=>$product,));
     }
 
+    public function deleteAction($id)
+    {
+        $product = ProductQuery::create()->findPk($id);
+        if($product==null)
+            throw $this->createNotFoundException('recorder not exists');
+        $product->delete();
+        return $this->redirect($this->generateUrl('ex_admin_product_list'));
+    }
 }

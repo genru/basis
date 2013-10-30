@@ -32,7 +32,7 @@ Keys
     <form action="{{ path('ex_admin_key_new') }}" method="post" {{ form_enctype(form) }}>
         <!-- {{ form_errors(form) }} -->
         <!-- render remaining fields in form -->
-        {{ form(form) }}
+        {{ form_rest(form) }}
         <button id="submit-btn" type="SUBMIT" class="btn btn-gebo" data-loading-text="Saving..."><i class="icon-ok icon-white"></i> Add</button>
         <a href="{{ path('ex_admin_key_home') }}" class="btn btn-link"> Cancel</a>
     </form>

@@ -15,6 +15,11 @@ ex_admin_key_update:
     defaults: { _controller: ExinaAdminBundle:Key:update }
     requirements:
         id: \d+
+ex_admin_key_delete:
+    pattern: /key/delete/{id}
+    defaults: { _controller: ExinaAdminBundle:Key:delete }
+    requirements:
+        id: \d+
 
 ex_admin_product_home:
     pattern: /product/
@@ -28,5 +33,10 @@ ex_admin_product_new:
 ex_admin_product_update:
     pattern: /product/update/{id}
     defaults: { _controller: ExinaAdminBundle:Product:update }
+    requirements:
+        id: \d+
+ex_admin_product_delete:
+    pattern: /product/delete/{id}
+    defaults: { _controller: ExinaAdminBundle:Product:delete }
     requirements:
         id: \d+

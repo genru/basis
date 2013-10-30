@@ -60,10 +60,26 @@ class KeyController extends Controller
 
         $form = $this->createFormBuilder( $key)
             ->add('productKey')
+            ->add('product', 'model', array(
+                'class' => 'Exina\AdminBundle\Model\Product',
+                'property' => 'name',
+                'multiple' => false,
+                'attr' => array('data-placeholder' => '-')))
+            ->add('order', 'model', array(
+                'class' => 'Exina\AdminBundle\Model\Order',
+                'property' => 'trans_id',
+                'multiple' => false,
+                'attr' => array('data-placeholder' => '-'),))
+           ->add('host', 'model', array(
+                'class' => 'Exina\AdminBundle\Model\Host',
+                'property' => 'fingerprint',
+                'multiple' => false,
+                'attr' => array('data-placeholder' => '-'),))
             ->add('createdAt', 'datetime', array('widget'=>'single_text', 'read_only'=>true))
-            ->add('updatedAt', 'datetime', array('widget'=>'single_text', 'read_only'=>true))
-            ->getForm();
+                ->add('updatedAt', 'datetime', array('widget'=>'single_text', 'read_only'=>true))
+                ->getForm();
 
+        // $form = $this->createForm(new KeyType(), $key, array('update_form'=>true));
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
@@ -82,4 +98,12 @@ class KeyController extends Controller
                 'errors' => $errors, 'key'=>$key,));
     }
 
+    public function deleteAction($id)
+    {
+        $key = KeyQuery::create()->findPk($id);
+        if($key==null)
+            throw $this->createNotFoundException('recorder not exists');
+        $key->delete();
+        return $this->redirect($this->generateUrl('ex_admin_key_list'));
+    }
 }
