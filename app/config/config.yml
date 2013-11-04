@@ -101,3 +101,12 @@ orderly_pay_pal_ipn:
         orm:
             object_manager: doctrine.orm.entity_manager
             classes: ~
+
+services:
+    # ...
+
+    paypal_im_received:
+        class: Exina\AdminBundle\Event\PayPalListener
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: kernel.event_listener, event: paypal.ipn.receive, method: onIPNReceive }
