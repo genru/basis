@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Exina\AdminBundle\Model\Key;
 use Exina\AdminBundle\Model\KeyPeer;
 use Exina\AdminBundle\Model\KeyQuery;
-use Exina\AdminBundle\Form\type\KeyType;
+use Exina\AdminBundle\Form\Type\KeyType;
 
 class KeyController extends Controller
 {

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Exina\AdminBundle\Model\Order;
 use Exina\AdminBundle\Model\OrderPeer;
 use Exina\AdminBundle\Model\OrderQuery;
-use Exina\AdminBundle\Form\type\OrderType;
+use Exina\AdminBundle\Form\Type\OrderType;
 
 class OrderController extends Controller
 {

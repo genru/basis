@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Exina\AdminBundle\Model\Customer;
 use Exina\AdminBundle\Model\CustomerPeer;
 use Exina\AdminBundle\Model\CustomerQuery;
-use Exina\AdminBundle\Form\type\CustomerType;
+use Exina\AdminBundle\Form\Type\CustomerType;
 
 class CustomerController extends Controller
 {

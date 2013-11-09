@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Exina\AdminBundle\Model\Host;
 use Exina\AdminBundle\Model\HostPeer;
 use Exina\AdminBundle\Model\HostQuery;
-use Exina\AdminBundle\Form\type\HostType;
+use Exina\AdminBundle\Form\Type\HostType;
 
 class HostController extends Controller
 {

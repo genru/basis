@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Exina\AdminBundle\Model\Product;
 use Exina\AdminBundle\Model\ProductPeer;
 use Exina\AdminBundle\Model\ProductQuery;
-use Exina\AdminBundle\Form\type\ProductType;
+use Exina\AdminBundle\Form\Type\ProductType;
 
 class ProductController extends Controller
 {
