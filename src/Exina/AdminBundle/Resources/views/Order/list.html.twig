@@ -40,7 +40,7 @@ Orders
         <thead>
         <tr>
             <th>transaction</th>
-            <th>product</th>
+            <th>Items</th>
             <th>agent</th>
             <th>state</th>
             <th>customer</th>
@@ -51,7 +51,7 @@ Orders
             {% for order in orders %}
                 <tr>
                     <td><a href="{{path('ex_admin_order_update', {'id':order.id})}}" title="see details"> {{order.transid}}</a></td>
-                    <td><a href="{{path('ex_admin_product_update', {'id':order.product.id})}}" title="see details"> {{order.product}}</a></td>
+                    <td> {{order.orderitems[0].product.name}}</td>
                     <td>
                         {{order.agent}}
                     </td>
