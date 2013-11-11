@@ -78,6 +78,24 @@ CREATE TABLE `basis_order`
 ) ENGINE=MyISAM;
 
 -- ---------------------------------------------------------------------
+-- basis_order_item
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `basis_order_item`;
+
+CREATE TABLE `basis_order_item`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `order_id` INTEGER NOT NULL,
+    `product_id` INTEGER NOT NULL,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`id`),
+    INDEX `basis_order_item_FI_1` (`order_id`),
+    INDEX `basis_order_item_FI_2` (`product_id`)
+) ENGINE=MyISAM;
+
+-- ---------------------------------------------------------------------
 -- basis_host
 -- ---------------------------------------------------------------------
 

@@ -7,7 +7,7 @@ use \TableMap;
 
 
 /**
- * This class defines the structure of the 'basis_order' table.
+ * This class defines the structure of the 'basis_order_item' table.
  *
  *
  *
@@ -18,13 +18,13 @@ use \TableMap;
  *
  * @package    propel.generator.src.Exina.AdminBundle.Model.map
  */
-class OrderTableMap extends TableMap
+class OrderItemTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'src.Exina.AdminBundle.Model.map.OrderTableMap';
+    const CLASS_NAME = 'src.Exina.AdminBundle.Model.map.OrderItemTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -36,24 +36,14 @@ class OrderTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('basis_order');
-        $this->setPhpName('Order');
-        $this->setClassname('Exina\\AdminBundle\\Model\\Order');
+        $this->setName('basis_order_item');
+        $this->setPhpName('OrderItem');
+        $this->setClassname('Exina\\AdminBundle\\Model\\OrderItem');
         $this->setPackage('src.Exina.AdminBundle.Model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('agent', 'Agent', 'VARCHAR', false, 255, null);
-        $this->addColumn('trans_id', 'TransId', 'VARCHAR', false, 255, null);
-        $this->getColumn('trans_id', false)->setPrimaryString(true);
-        $this->addColumn('state', 'State', 'ENUM', false, null, null);
-        $this->getColumn('state', false)->setValueSet(array (
-  0 => 'PAID',
-  1 => 'PENDING',
-  2 => 'REFUNDED',
-  3 => 'CANCELLED',
-));
-        $this->addForeignKey('customer_id', 'CustomerId', 'INTEGER', 'basis_customer', 'id', true, null, null);
+        $this->addForeignKey('order_id', 'OrderId', 'INTEGER', 'basis_order', 'id', true, null, null);
         $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'basis_product', 'id', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -65,10 +55,8 @@ class OrderTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Customer', 'Exina\\AdminBundle\\Model\\Customer', RelationMap::MANY_TO_ONE, array('customer_id' => 'id', ), null, null);
+        $this->addRelation('Order', 'Exina\\AdminBundle\\Model\\Order', RelationMap::MANY_TO_ONE, array('order_id' => 'id', ), null, null);
         $this->addRelation('Product', 'Exina\\AdminBundle\\Model\\Product', RelationMap::MANY_TO_ONE, array('product_id' => 'id', ), null, null);
-        $this->addRelation('Key', 'Exina\\AdminBundle\\Model\\Key', RelationMap::ONE_TO_MANY, array('id' => 'order_id', ), null, null, 'Keys');
-        $this->addRelation('OrderItem', 'Exina\\AdminBundle\\Model\\OrderItem', RelationMap::ONE_TO_MANY, array('id' => 'order_id', ), null, null, 'OrderItems');
     } // buildRelations()
 
     /**
@@ -88,4 +76,4 @@ class OrderTableMap extends TableMap
         );
     } // getBehaviors()
 
-} // OrderTableMap
+} // OrderItemTableMap

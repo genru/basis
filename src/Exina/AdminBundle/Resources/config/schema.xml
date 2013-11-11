@@ -46,6 +46,20 @@
         </foreign-key>
     </table>
 
+    <table name="basis_order_item" phpName="OrderItem">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+        <column name="order_id" type="INTEGER" required="true" />
+        <foreign-key foreignTable="basis_order">
+            <reference local="order_id" foreign="id"/>
+        </foreign-key>
+        <column name="product_id" type="INTEGER" required="true" />
+        <foreign-key foreignTable="basis_product">
+            <reference local="product_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+
+
     <table name="basis_host" phpName="Host">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
         <column name="fingerprint" type="varchar" size="255" primaryString="true" />
