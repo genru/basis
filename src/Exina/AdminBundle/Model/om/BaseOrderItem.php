@@ -61,6 +61,12 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
     protected $product_id;
 
     /**
+     * The value for the quantity field.
+     * @var        int
+     */
+    protected $quantity;
+
+    /**
      * The value for the created_at field.
      * @var        string
      */
@@ -133,6 +139,17 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
     {
 
         return $this->product_id;
+    }
+
+    /**
+     * Get the [quantity] column value.
+     *
+     * @return int
+     */
+    public function getQuantity()
+    {
+
+        return $this->quantity;
     }
 
     /**
@@ -287,6 +304,27 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
     } // setProductId()
 
     /**
+     * Set the value of [quantity] column.
+     *
+     * @param  int $v new value
+     * @return OrderItem The current object (for fluent API support)
+     */
+    public function setQuantity($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->quantity !== $v) {
+            $this->quantity = $v;
+            $this->modifiedColumns[] = OrderItemPeer::QUANTITY;
+        }
+
+
+        return $this;
+    } // setQuantity()
+
+    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
@@ -367,8 +405,9 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->order_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->product_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->created_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->updated_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->quantity = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -378,7 +417,7 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = OrderItemPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = OrderItemPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating OrderItem object", $e);
@@ -637,6 +676,9 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
         if ($this->isColumnModified(OrderItemPeer::PRODUCT_ID)) {
             $modifiedColumns[':p' . $index++]  = '`product_id`';
         }
+        if ($this->isColumnModified(OrderItemPeer::QUANTITY)) {
+            $modifiedColumns[':p' . $index++]  = '`quantity`';
+        }
         if ($this->isColumnModified(OrderItemPeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
         }
@@ -662,6 +704,9 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
                         break;
                     case '`product_id`':
                         $stmt->bindValue($identifier, $this->product_id, PDO::PARAM_INT);
+                        break;
+                    case '`quantity`':
+                        $stmt->bindValue($identifier, $this->quantity, PDO::PARAM_INT);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -831,9 +876,12 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
                 return $this->getProductId();
                 break;
             case 3:
-                return $this->getCreatedAt();
+                return $this->getQuantity();
                 break;
             case 4:
+                return $this->getCreatedAt();
+                break;
+            case 5:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -868,8 +916,9 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
             $keys[0] => $this->getId(),
             $keys[1] => $this->getOrderId(),
             $keys[2] => $this->getProductId(),
-            $keys[3] => $this->getCreatedAt(),
-            $keys[4] => $this->getUpdatedAt(),
+            $keys[3] => $this->getQuantity(),
+            $keys[4] => $this->getCreatedAt(),
+            $keys[5] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -927,9 +976,12 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
                 $this->setProductId($value);
                 break;
             case 3:
-                $this->setCreatedAt($value);
+                $this->setQuantity($value);
                 break;
             case 4:
+                $this->setCreatedAt($value);
+                break;
+            case 5:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -959,8 +1011,9 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setOrderId($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setProductId($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setCreatedAt($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setUpdatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[3], $arr)) $this->setQuantity($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
     }
 
     /**
@@ -975,6 +1028,7 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
         if ($this->isColumnModified(OrderItemPeer::ID)) $criteria->add(OrderItemPeer::ID, $this->id);
         if ($this->isColumnModified(OrderItemPeer::ORDER_ID)) $criteria->add(OrderItemPeer::ORDER_ID, $this->order_id);
         if ($this->isColumnModified(OrderItemPeer::PRODUCT_ID)) $criteria->add(OrderItemPeer::PRODUCT_ID, $this->product_id);
+        if ($this->isColumnModified(OrderItemPeer::QUANTITY)) $criteria->add(OrderItemPeer::QUANTITY, $this->quantity);
         if ($this->isColumnModified(OrderItemPeer::CREATED_AT)) $criteria->add(OrderItemPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(OrderItemPeer::UPDATED_AT)) $criteria->add(OrderItemPeer::UPDATED_AT, $this->updated_at);
 
@@ -1042,6 +1096,7 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
     {
         $copyObj->setOrderId($this->getOrderId());
         $copyObj->setProductId($this->getProductId());
+        $copyObj->setQuantity($this->getQuantity());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
 
@@ -1214,6 +1269,7 @@ abstract class BaseOrderItem extends BaseObject implements Persistent
         $this->id = null;
         $this->order_id = null;
         $this->product_id = null;
+        $this->quantity = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->alreadyInSave = false;

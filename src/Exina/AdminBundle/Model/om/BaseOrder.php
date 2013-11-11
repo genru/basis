@@ -24,8 +24,6 @@ use Exina\AdminBundle\Model\OrderItem;
 use Exina\AdminBundle\Model\OrderItemQuery;
 use Exina\AdminBundle\Model\OrderPeer;
 use Exina\AdminBundle\Model\OrderQuery;
-use Exina\AdminBundle\Model\Product;
-use Exina\AdminBundle\Model\ProductQuery;
 
 abstract class BaseOrder extends BaseObject implements Persistent
 {
@@ -79,12 +77,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
     protected $customer_id;
 
     /**
-     * The value for the product_id field.
-     * @var        int
-     */
-    protected $product_id;
-
-    /**
      * The value for the created_at field.
      * @var        string
      */
@@ -100,11 +92,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
      * @var        Customer
      */
     protected $aCustomer;
-
-    /**
-     * @var        Product
-     */
-    protected $aProduct;
 
     /**
      * @var        PropelObjectCollection|Key[] Collection to store aggregation of Key objects.
@@ -211,17 +198,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
     {
 
         return $this->customer_id;
-    }
-
-    /**
-     * Get the [product_id] column value.
-     *
-     * @return int
-     */
-    public function getProductId()
-    {
-
-        return $this->product_id;
     }
 
     /**
@@ -419,31 +395,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
     } // setCustomerId()
 
     /**
-     * Set the value of [product_id] column.
-     *
-     * @param  int $v new value
-     * @return Order The current object (for fluent API support)
-     */
-    public function setProductId($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->product_id !== $v) {
-            $this->product_id = $v;
-            $this->modifiedColumns[] = OrderPeer::PRODUCT_ID;
-        }
-
-        if ($this->aProduct !== null && $this->aProduct->getId() !== $v) {
-            $this->aProduct = null;
-        }
-
-
-        return $this;
-    } // setProductId()
-
-    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
@@ -526,9 +477,8 @@ abstract class BaseOrder extends BaseObject implements Persistent
             $this->trans_id = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
             $this->state = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->customer_id = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->product_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->created_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->updated_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->created_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->updated_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -538,7 +488,7 @@ abstract class BaseOrder extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 8; // 8 = OrderPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = OrderPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Order object", $e);
@@ -563,9 +513,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
 
         if ($this->aCustomer !== null && $this->customer_id !== $this->aCustomer->getId()) {
             $this->aCustomer = null;
-        }
-        if ($this->aProduct !== null && $this->product_id !== $this->aProduct->getId()) {
-            $this->aProduct = null;
         }
     } // ensureConsistency
 
@@ -607,7 +554,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aCustomer = null;
-            $this->aProduct = null;
             $this->collKeys = null;
 
             $this->collOrderItems = null;
@@ -748,13 +694,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
                 $this->setCustomer($this->aCustomer);
             }
 
-            if ($this->aProduct !== null) {
-                if ($this->aProduct->isModified() || $this->aProduct->isNew()) {
-                    $affectedRows += $this->aProduct->save($con);
-                }
-                $this->setProduct($this->aProduct);
-            }
-
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -842,9 +781,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
         if ($this->isColumnModified(OrderPeer::CUSTOMER_ID)) {
             $modifiedColumns[':p' . $index++]  = '`customer_id`';
         }
-        if ($this->isColumnModified(OrderPeer::PRODUCT_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`product_id`';
-        }
         if ($this->isColumnModified(OrderPeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
         }
@@ -876,9 +812,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
                         break;
                     case '`customer_id`':
                         $stmt->bindValue($identifier, $this->customer_id, PDO::PARAM_INT);
-                        break;
-                    case '`product_id`':
-                        $stmt->bindValue($identifier, $this->product_id, PDO::PARAM_INT);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -991,12 +924,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
                 }
             }
 
-            if ($this->aProduct !== null) {
-                if (!$this->aProduct->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aProduct->getValidationFailures());
-                }
-            }
-
 
             if (($retval = OrderPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
@@ -1070,12 +997,9 @@ abstract class BaseOrder extends BaseObject implements Persistent
                 return $this->getCustomerId();
                 break;
             case 5:
-                return $this->getProductId();
-                break;
-            case 6:
                 return $this->getCreatedAt();
                 break;
-            case 7:
+            case 6:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1112,9 +1036,8 @@ abstract class BaseOrder extends BaseObject implements Persistent
             $keys[2] => $this->getTransId(),
             $keys[3] => $this->getState(),
             $keys[4] => $this->getCustomerId(),
-            $keys[5] => $this->getProductId(),
-            $keys[6] => $this->getCreatedAt(),
-            $keys[7] => $this->getUpdatedAt(),
+            $keys[5] => $this->getCreatedAt(),
+            $keys[6] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1124,9 +1047,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
         if ($includeForeignObjects) {
             if (null !== $this->aCustomer) {
                 $result['Customer'] = $this->aCustomer->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aProduct) {
-                $result['Product'] = $this->aProduct->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collKeys) {
                 $result['Keys'] = $this->collKeys->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1188,12 +1108,9 @@ abstract class BaseOrder extends BaseObject implements Persistent
                 $this->setCustomerId($value);
                 break;
             case 5:
-                $this->setProductId($value);
-                break;
-            case 6:
                 $this->setCreatedAt($value);
                 break;
-            case 7:
+            case 6:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1225,9 +1142,8 @@ abstract class BaseOrder extends BaseObject implements Persistent
         if (array_key_exists($keys[2], $arr)) $this->setTransId($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setState($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setCustomerId($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setProductId($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setCreatedAt($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setUpdatedAt($arr[$keys[7]]);
+        if (array_key_exists($keys[5], $arr)) $this->setCreatedAt($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setUpdatedAt($arr[$keys[6]]);
     }
 
     /**
@@ -1244,7 +1160,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
         if ($this->isColumnModified(OrderPeer::TRANS_ID)) $criteria->add(OrderPeer::TRANS_ID, $this->trans_id);
         if ($this->isColumnModified(OrderPeer::STATE)) $criteria->add(OrderPeer::STATE, $this->state);
         if ($this->isColumnModified(OrderPeer::CUSTOMER_ID)) $criteria->add(OrderPeer::CUSTOMER_ID, $this->customer_id);
-        if ($this->isColumnModified(OrderPeer::PRODUCT_ID)) $criteria->add(OrderPeer::PRODUCT_ID, $this->product_id);
         if ($this->isColumnModified(OrderPeer::CREATED_AT)) $criteria->add(OrderPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(OrderPeer::UPDATED_AT)) $criteria->add(OrderPeer::UPDATED_AT, $this->updated_at);
 
@@ -1314,7 +1229,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
         $copyObj->setTransId($this->getTransId());
         $copyObj->setState($this->getState());
         $copyObj->setCustomerId($this->getCustomerId());
-        $copyObj->setProductId($this->getProductId());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
 
@@ -1437,58 +1351,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
         }
 
         return $this->aCustomer;
-    }
-
-    /**
-     * Declares an association between this object and a Product object.
-     *
-     * @param                  Product $v
-     * @return Order The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setProduct(Product $v = null)
-    {
-        if ($v === null) {
-            $this->setProductId(NULL);
-        } else {
-            $this->setProductId($v->getId());
-        }
-
-        $this->aProduct = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Product object, it will not be re-added.
-        if ($v !== null) {
-            $v->addOrder($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Product object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Product The associated Product object.
-     * @throws PropelException
-     */
-    public function getProduct(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aProduct === null && ($this->product_id !== null) && $doQuery) {
-            $this->aProduct = ProductQuery::create()->findPk($this->product_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aProduct->addOrders($this);
-             */
-        }
-
-        return $this->aProduct;
     }
 
 
@@ -2045,7 +1907,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
         $this->trans_id = null;
         $this->state = null;
         $this->customer_id = null;
-        $this->product_id = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->alreadyInSave = false;
@@ -2083,9 +1944,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
             if ($this->aCustomer instanceof Persistent) {
               $this->aCustomer->clearAllReferences($deep);
             }
-            if ($this->aProduct instanceof Persistent) {
-              $this->aProduct->clearAllReferences($deep);
-            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
@@ -2099,7 +1957,6 @@ abstract class BaseOrder extends BaseObject implements Persistent
         }
         $this->collOrderItems = null;
         $this->aCustomer = null;
-        $this->aProduct = null;
     }
 
     /**

@@ -18,7 +18,12 @@ class OrderItemType extends BaseAbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('orderId');
-        $builder->add('productId');
+        $builder->add('product', 'model', array(
+            'class' => 'Exina\AdminBundle\Model\Product',
+            'property' => 'name',
+            'multiple' => false,
+            'attr' => array('data-placeholder' => '-')));
+        $builder->add('quantity');
         $builder->add('createdAt');
         $builder->add('updatedAt');
     }

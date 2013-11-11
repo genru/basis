@@ -22,12 +22,14 @@ use Exina\AdminBundle\Model\Product;
  * @method OrderItemQuery orderById($order = Criteria::ASC) Order by the id column
  * @method OrderItemQuery orderByOrderId($order = Criteria::ASC) Order by the order_id column
  * @method OrderItemQuery orderByProductId($order = Criteria::ASC) Order by the product_id column
+ * @method OrderItemQuery orderByQuantity($order = Criteria::ASC) Order by the quantity column
  * @method OrderItemQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method OrderItemQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method OrderItemQuery groupById() Group by the id column
  * @method OrderItemQuery groupByOrderId() Group by the order_id column
  * @method OrderItemQuery groupByProductId() Group by the product_id column
+ * @method OrderItemQuery groupByQuantity() Group by the quantity column
  * @method OrderItemQuery groupByCreatedAt() Group by the created_at column
  * @method OrderItemQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -48,12 +50,14 @@ use Exina\AdminBundle\Model\Product;
  *
  * @method OrderItem findOneByOrderId(int $order_id) Return the first OrderItem filtered by the order_id column
  * @method OrderItem findOneByProductId(int $product_id) Return the first OrderItem filtered by the product_id column
+ * @method OrderItem findOneByQuantity(int $quantity) Return the first OrderItem filtered by the quantity column
  * @method OrderItem findOneByCreatedAt(string $created_at) Return the first OrderItem filtered by the created_at column
  * @method OrderItem findOneByUpdatedAt(string $updated_at) Return the first OrderItem filtered by the updated_at column
  *
  * @method array findById(int $id) Return OrderItem objects filtered by the id column
  * @method array findByOrderId(int $order_id) Return OrderItem objects filtered by the order_id column
  * @method array findByProductId(int $product_id) Return OrderItem objects filtered by the product_id column
+ * @method array findByQuantity(int $quantity) Return OrderItem objects filtered by the quantity column
  * @method array findByCreatedAt(string $created_at) Return OrderItem objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return OrderItem objects filtered by the updated_at column
  */
@@ -161,7 +165,7 @@ abstract class BaseOrderItemQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `order_id`, `product_id`, `created_at`, `updated_at` FROM `basis_order_item` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `order_id`, `product_id`, `quantity`, `created_at`, `updated_at` FROM `basis_order_item` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -378,6 +382,48 @@ abstract class BaseOrderItemQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(OrderItemPeer::PRODUCT_ID, $productId, $comparison);
+    }
+
+    /**
+     * Filter the query on the quantity column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByQuantity(1234); // WHERE quantity = 1234
+     * $query->filterByQuantity(array(12, 34)); // WHERE quantity IN (12, 34)
+     * $query->filterByQuantity(array('min' => 12)); // WHERE quantity >= 12
+     * $query->filterByQuantity(array('max' => 12)); // WHERE quantity <= 12
+     * </code>
+     *
+     * @param     mixed $quantity The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrderItemQuery The current query, for fluid interface
+     */
+    public function filterByQuantity($quantity = null, $comparison = null)
+    {
+        if (is_array($quantity)) {
+            $useMinMax = false;
+            if (isset($quantity['min'])) {
+                $this->addUsingAlias(OrderItemPeer::QUANTITY, $quantity['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($quantity['max'])) {
+                $this->addUsingAlias(OrderItemPeer::QUANTITY, $quantity['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrderItemPeer::QUANTITY, $quantity, $comparison);
     }
 
     /**

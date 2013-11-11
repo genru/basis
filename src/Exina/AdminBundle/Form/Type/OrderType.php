@@ -29,11 +29,6 @@ class OrderType extends BaseAbstractType
             'property' => 'name',
             'multiple' => false,
             'attr' => array('data-placeholder' => '-')));
-        $builder->add('product', 'model', array(
-            'class' => 'Exina\AdminBundle\Model\Product',
-            'property' => 'name',
-            'multiple' => false,
-            'attr' => array('data-placeholder' => '-')));
         $builder->add('agent');
         $builder->add('transId');
         $builder->add('state');
@@ -41,7 +36,6 @@ class OrderType extends BaseAbstractType
         {
             $builder->add('createdAt', 'datetime', array('widget' => 'single_text', 'read_only'=>true));
             $builder->add('updatedAt', 'datetime', array('widget' => 'single_text', 'read_only'=>true));
-
         }
         else
         {

@@ -54,7 +54,6 @@ class OrderTableMap extends TableMap
   3 => 'CANCELLED',
 ));
         $this->addForeignKey('customer_id', 'CustomerId', 'INTEGER', 'basis_customer', 'id', true, null, null);
-        $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'basis_product', 'id', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         // validators
@@ -66,7 +65,6 @@ class OrderTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Customer', 'Exina\\AdminBundle\\Model\\Customer', RelationMap::MANY_TO_ONE, array('customer_id' => 'id', ), null, null);
-        $this->addRelation('Product', 'Exina\\AdminBundle\\Model\\Product', RelationMap::MANY_TO_ONE, array('product_id' => 'id', ), null, null);
         $this->addRelation('Key', 'Exina\\AdminBundle\\Model\\Key', RelationMap::ONE_TO_MANY, array('id' => 'order_id', ), null, null, 'Keys');
         $this->addRelation('OrderItem', 'Exina\\AdminBundle\\Model\\OrderItem', RelationMap::ONE_TO_MANY, array('id' => 'order_id', ), null, null, 'OrderItems');
     } // buildRelations()

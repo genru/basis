@@ -18,7 +18,6 @@ use Exina\AdminBundle\Model\Order;
 use Exina\AdminBundle\Model\OrderItem;
 use Exina\AdminBundle\Model\OrderPeer;
 use Exina\AdminBundle\Model\OrderQuery;
-use Exina\AdminBundle\Model\Product;
 
 /**
  * @method OrderQuery orderById($order = Criteria::ASC) Order by the id column
@@ -26,7 +25,6 @@ use Exina\AdminBundle\Model\Product;
  * @method OrderQuery orderByTransId($order = Criteria::ASC) Order by the trans_id column
  * @method OrderQuery orderByState($order = Criteria::ASC) Order by the state column
  * @method OrderQuery orderByCustomerId($order = Criteria::ASC) Order by the customer_id column
- * @method OrderQuery orderByProductId($order = Criteria::ASC) Order by the product_id column
  * @method OrderQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method OrderQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
@@ -35,7 +33,6 @@ use Exina\AdminBundle\Model\Product;
  * @method OrderQuery groupByTransId() Group by the trans_id column
  * @method OrderQuery groupByState() Group by the state column
  * @method OrderQuery groupByCustomerId() Group by the customer_id column
- * @method OrderQuery groupByProductId() Group by the product_id column
  * @method OrderQuery groupByCreatedAt() Group by the created_at column
  * @method OrderQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -46,10 +43,6 @@ use Exina\AdminBundle\Model\Product;
  * @method OrderQuery leftJoinCustomer($relationAlias = null) Adds a LEFT JOIN clause to the query using the Customer relation
  * @method OrderQuery rightJoinCustomer($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Customer relation
  * @method OrderQuery innerJoinCustomer($relationAlias = null) Adds a INNER JOIN clause to the query using the Customer relation
- *
- * @method OrderQuery leftJoinProduct($relationAlias = null) Adds a LEFT JOIN clause to the query using the Product relation
- * @method OrderQuery rightJoinProduct($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Product relation
- * @method OrderQuery innerJoinProduct($relationAlias = null) Adds a INNER JOIN clause to the query using the Product relation
  *
  * @method OrderQuery leftJoinKey($relationAlias = null) Adds a LEFT JOIN clause to the query using the Key relation
  * @method OrderQuery rightJoinKey($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Key relation
@@ -66,7 +59,6 @@ use Exina\AdminBundle\Model\Product;
  * @method Order findOneByTransId(string $trans_id) Return the first Order filtered by the trans_id column
  * @method Order findOneByState(int $state) Return the first Order filtered by the state column
  * @method Order findOneByCustomerId(int $customer_id) Return the first Order filtered by the customer_id column
- * @method Order findOneByProductId(int $product_id) Return the first Order filtered by the product_id column
  * @method Order findOneByCreatedAt(string $created_at) Return the first Order filtered by the created_at column
  * @method Order findOneByUpdatedAt(string $updated_at) Return the first Order filtered by the updated_at column
  *
@@ -75,7 +67,6 @@ use Exina\AdminBundle\Model\Product;
  * @method array findByTransId(string $trans_id) Return Order objects filtered by the trans_id column
  * @method array findByState(int $state) Return Order objects filtered by the state column
  * @method array findByCustomerId(int $customer_id) Return Order objects filtered by the customer_id column
- * @method array findByProductId(int $product_id) Return Order objects filtered by the product_id column
  * @method array findByCreatedAt(string $created_at) Return Order objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return Order objects filtered by the updated_at column
  */
@@ -183,7 +174,7 @@ abstract class BaseOrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `agent`, `trans_id`, `state`, `customer_id`, `product_id`, `created_at`, `updated_at` FROM `basis_order` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `agent`, `trans_id`, `state`, `customer_id`, `created_at`, `updated_at` FROM `basis_order` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -444,50 +435,6 @@ abstract class BaseOrderQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the product_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByProductId(1234); // WHERE product_id = 1234
-     * $query->filterByProductId(array(12, 34)); // WHERE product_id IN (12, 34)
-     * $query->filterByProductId(array('min' => 12)); // WHERE product_id >= 12
-     * $query->filterByProductId(array('max' => 12)); // WHERE product_id <= 12
-     * </code>
-     *
-     * @see       filterByProduct()
-     *
-     * @param     mixed $productId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return OrderQuery The current query, for fluid interface
-     */
-    public function filterByProductId($productId = null, $comparison = null)
-    {
-        if (is_array($productId)) {
-            $useMinMax = false;
-            if (isset($productId['min'])) {
-                $this->addUsingAlias(OrderPeer::PRODUCT_ID, $productId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($productId['max'])) {
-                $this->addUsingAlias(OrderPeer::PRODUCT_ID, $productId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(OrderPeer::PRODUCT_ID, $productId, $comparison);
-    }
-
-    /**
      * Filter the query on the created_at column
      *
      * Example usage:
@@ -647,82 +594,6 @@ abstract class BaseOrderQuery extends ModelCriteria
         return $this
             ->joinCustomer($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Customer', '\Exina\AdminBundle\Model\CustomerQuery');
-    }
-
-    /**
-     * Filter the query by a related Product object
-     *
-     * @param   Product|PropelObjectCollection $product The related object(s) to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 OrderQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByProduct($product, $comparison = null)
-    {
-        if ($product instanceof Product) {
-            return $this
-                ->addUsingAlias(OrderPeer::PRODUCT_ID, $product->getId(), $comparison);
-        } elseif ($product instanceof PropelObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(OrderPeer::PRODUCT_ID, $product->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByProduct() only accepts arguments of type Product or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Product relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return OrderQuery The current query, for fluid interface
-     */
-    public function joinProduct($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Product');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Product');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Product relation Product object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   \Exina\AdminBundle\Model\ProductQuery A secondary query class using the current class as primary query
-     */
-    public function useProductQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinProduct($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Product', '\Exina\AdminBundle\Model\ProductQuery');
     }
 
     /**

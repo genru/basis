@@ -6,6 +6,8 @@ use Orderly\PayPalIpnBundle\Event\PayPalEvent;
 use Doctrine\Common\Persistence\ObjectManager;
 use Exina\AdminBundle\Model\Customer;
 use Exina\AdminBundle\Model\Order;
+use Exina\AdminBundle\Model\OrderPeer;
+use Exina\AdminBundle\Model\OrderItem;
 use Exina\AdminBundle\Model\Product;
 use Exina\AdminBundle\Model\ProductQuery;
 
@@ -22,16 +24,28 @@ class PayPalListener {
         // do your stuff
 
         $ipnOrder = $ipn->getOrder();
+        $items = $ipn->getOrderItems();
+
         $customer = new Customer();
         $customer->setName($ipnOrder->getAddressName());
         $customer->setEmail($ipnOrder->getPayerEmail());
         $customer->setOrganization($ipnOrder->getPayerBusinessName());
-        $customer->save();
+        // $customer->save();
 
-        $product = ProductQuery::create()->findPk();
+        $order = new Order();
+        $order->setAgent("Paypal Instance");
+        $order->setTransId($ipnOrder->getTxnId());
+        $order->setState(OrderPeer::STATE_PAID);
+        $order->setCustomer($customer);
 
-        $p = new Host();
-        $p->setFingerprint("newss");
-        $p->save();
+        foreach ($items as $item) {
+            # code...
+            $product = ProductQuery::create()->findPk($item->getItemNumber());
+            $orderItem = new OrderItem();
+            $orderItem->setOrder($order);
+            $orderItem->setProduct($product);
+            $orderItem->setQuantity($item->getQuantity());
+            $orderItem->save();
+        }
     }
 }
