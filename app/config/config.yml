@@ -88,12 +88,12 @@ orderly_pay_pal_ipn:
     islive:  false
 
     # Constants for the live environment (default settings in Configuration.php)
-    email:   genjuroa@ymail.com 
+    email:   genjuroa@ymail.com
     url:     https://www.paypal.com/cgi-bin/webscr
     debug:   %kernel.debug%
 
     # Constants for the sandbox environment (default settings in Configuration.php)
-    sandbox_email:   seller@paypalsandbox.com 
+    sandbox_email:   genjuroa-facilitator@ymail.com
     sandbox_url:     https://www.sandbox.paypal.com/cgi-bin/webscr
     sandbox_debug:   true
 
