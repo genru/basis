@@ -93,7 +93,7 @@ orderly_pay_pal_ipn:
     debug:   %kernel.debug%
 
     # Constants for the sandbox environment (default settings in Configuration.php)
-    sandbox_email:   seller@paypalsandbox.com 
+    sandbox_email:   genjuroa-facilitator@ymail.com 
     sandbox_url:     https://www.sandbox.paypal.com/cgi-bin/webscr
     sandbox_debug:   true
 
