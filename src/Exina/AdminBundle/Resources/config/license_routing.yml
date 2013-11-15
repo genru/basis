@@ -1,0 +1,12 @@
+ex_license_active:
+    pattern: /active/{id}
+    defaults: { _controller: ExinaAdminBundle:License:active }
+    methods: [POST]
+    requirements:
+        id: \d+
+ex_license_status:
+    pattern: /status/{id}
+    defaults: { _controller: ExinaAdminBundle:License:status }
+    methods: [POST]
+    requirements:
+        id: \d+

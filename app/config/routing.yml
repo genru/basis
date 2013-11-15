@@ -20,8 +20,13 @@ fos_user_resetting:
 fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
+
 # http://{{YOUR DOMAIN}}/ipn/ipn-no-notification
 OrderlyPayPalIpnBundleNoEmail:
     resource: "@OrderlyPayPalIpnBundle/Controller/NoNotificationController.php"
     type:     annotation
     prefix:   /ipn/
+
+exina_license:
+    resource: "@ExinaAdminBundle/Resources/config/license_routing.yml"
+    prefix:   /v1
