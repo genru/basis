@@ -25,7 +25,7 @@ fos_user_change_password:
 OrderlyPayPalIpnBundleNoEmail:
     resource: "@OrderlyPayPalIpnBundle/Controller/NoNotificationController.php"
     type:     annotation
-    prefix:   /ipn/
+    prefix:   /ipn
 
 exina_license:
     resource: "@ExinaAdminBundle/Resources/config/license_routing.yml"
