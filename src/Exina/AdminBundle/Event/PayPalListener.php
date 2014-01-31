@@ -20,6 +20,8 @@ class PayPalListener {
     }
 
     public function onIPNReceive(PayPalEvent $event) {
+        $logger = $this->get('logger');
+        $logger->info('IPN Process begin');
         $ipn = $event->getIPN();
         // do your stuff
 
@@ -35,7 +37,10 @@ class PayPalListener {
         $order = new Order();
         $order->setAgent("Paypal Instance");
         $order->setTransId($ipnOrder->getTxnId());
-        $order->setState(OrderPeer::STATE_PAID);
+        if($ipn->getOrderStatus()==IPN::PAID)
+            $order->setState(OrderPeer::STATE_PAID);
+        else
+            $order->setState(OrderPeer::STATE_PENDING);
         $order->setCustomer($customer);
 
         foreach ($items as $item) {
