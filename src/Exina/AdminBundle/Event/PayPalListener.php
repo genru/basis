@@ -20,8 +20,6 @@ class PayPalListener {
     }
 
     public function onIPNReceive(PayPalEvent $event) {
-        $logger = $this->get('logger');
-        $logger->info('IPN Process begin');
         $ipn = $event->getIPN();
         // do your stuff
 
