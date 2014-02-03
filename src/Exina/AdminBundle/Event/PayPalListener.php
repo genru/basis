@@ -35,7 +35,7 @@ class PayPalListener {
         $order = new Order();
         $order->setAgent("Paypal Instance");
         $order->setTransId($ipnOrder->getTxnId());
-        if($ipn->getOrderStatus()==IPN::PAID)
+        if($ipn->getOrderStatus()==='PAID')
             $order->setState(OrderPeer::STATE_PAID);
         else
             $order->setState(OrderPeer::STATE_PENDING);
