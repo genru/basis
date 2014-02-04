@@ -45,7 +45,7 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{asset('img/user_avatar.png')}}" alt="" class="user_avatar"> {{ app.user ? app.user.username : 'Anonymous'}} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="{{path('fos_user_security_logout')}}"><i class="icon-off"></i> Logout</a></li>
+                  <li><a href="{{path('fos_user_security_logout')}}"><i class="icon-signout"></i> Logout</a></li>
                 </ul>
               </li>
               {% else %}
@@ -118,7 +118,7 @@
                 <div class="accordion-group">
                   <div class="accordion-heading">
                     <a href="#collapseZero" data-parent="#side_accordion" data-toggle="collapse" class="accordion-toggle">
-                      <i class="icon-flag"></i>
+                      <i class="icon-bar-chart"></i>
                       仪表盘
                     </a>
                   </div>
@@ -134,15 +134,15 @@
                 <div class="accordion-group">
                   <div class="accordion-heading">
                     <a href="#collapseOne" data-parent="#side_accordion" data-toggle="collapse" class="accordion-toggle" title="消费结账，客户挂账等">
-                      <i class="icon-shopping-cart"></i>
-                      收银
+                      <i class="icon-tags"></i>
+                      产品
                     </a>
                   </div>
                   <div class="accordion-body collapse" id="collapseOne">
                     <div class="accordion-inner">
                       <ul class="nav nav-list">
-                        <li><a href="#">订单管理</a></li>
-                        <li><a href="#">历史订单</a></li>
+                        <li><a href="{{path('ex_admin_product_list')}}">产品列表</a></li>
+                        {# <li><a href="#">历史订单</a></li> #}
                       </ul>
                     </div>
                   </div>
@@ -151,15 +151,15 @@
                 <div class="accordion-group">
                   <div class="accordion-heading">
                     <a href="#collapseTwo" data-parent="#side_accordion" data-toggle="collapse" class="accordion-toggle">
-                      <i class="icon-heart"></i>
-                      会员
+                      <i class="icon-check"></i>
+                      注册码
                     </a>
                   </div>
                   <div class="accordion-body collapse" id="collapseTwo">
                     <div class="accordion-inner">
                       <ul class="nav nav-list">
-                        <li><a href="#">查询</a></li>
-                        <li><a href="#">积分</a></li>
+                        <li><a href="{{path('ex_admin_key_list')}}">注册码列表</a></li>
+                        {# <li><a href="#">积分</a></li> #}
                       </ul>
                     </div>
                   </div>
@@ -169,14 +169,14 @@
                  <div class="accordion-group">
                   <div class="accordion-heading">
                     <a href="#collapseFour" data-parent="#side_accordion" data-toggle="collapse" class="accordion-toggle">
-                      <i class="splashy-group_grey"></i>
-                      供应商
+                      <i class="icon-shopping-cart"></i>
+                      订单
                     </a>
                   </div>
                   <div class="accordion-body collapse" id="collapseFour">
                     <div class="accordion-inner">
                       <ul class="nav nav-list">
-                        <li><a href="#">供应商列表</a></li>
+                        <li><a href="{{path('ex_admin_order_list')}}">订单列表</a></li>
                       </ul>
                     </div>
                   </div>
@@ -185,16 +185,14 @@
                 <div class="accordion-group">
                   <div class="accordion-heading">
                     <a href="#collapseFive" data-parent="#side_accordion" data-toggle="collapse" class="accordion-toggle">
-                      <i class="icon-list"></i>
-                      美容项目
+                      <i class="icon-group"></i>
+                      客户
                     </a>
                   </div>
                   <div class="accordion-body collapse" id="collapseFive">
                     <div class="accordion-inner">
                       <ul class="nav nav-list">
-                        <li><a href="#">单项</a></li>
-                        <li><a href="#">套餐(促销礼包)</a></li>
-                        <li><a href="#">疗程</a></li>
+                        <li><a href="{{path('ex_admin_customer_list')}}">客户列表</a></li>
                       </ul>
                     </div>
                   </div>
