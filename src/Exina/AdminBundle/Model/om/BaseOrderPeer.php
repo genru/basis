@@ -30,13 +30,13 @@ abstract class BaseOrderPeer
     const TM_CLASS = 'Exina\\AdminBundle\\Model\\map\\OrderTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /** the column name for the id field */
     const ID = 'basis_order.id';
@@ -52,6 +52,9 @@ abstract class BaseOrderPeer
 
     /** the column name for the customer_id field */
     const CUSTOMER_ID = 'basis_order.customer_id';
+
+    /** the column name for the gross field */
+    const GROSS = 'basis_order.gross';
 
     /** the column name for the created_at field */
     const CREATED_AT = 'basis_order.created_at';
@@ -84,12 +87,12 @@ abstract class BaseOrderPeer
      * e.g. OrderPeer::$fieldNames[OrderPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Agent', 'TransId', 'State', 'CustomerId', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'agent', 'transId', 'state', 'customerId', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (OrderPeer::ID, OrderPeer::AGENT, OrderPeer::TRANS_ID, OrderPeer::STATE, OrderPeer::CUSTOMER_ID, OrderPeer::CREATED_AT, OrderPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'AGENT', 'TRANS_ID', 'STATE', 'CUSTOMER_ID', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'agent', 'trans_id', 'state', 'customer_id', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Agent', 'TransId', 'State', 'CustomerId', 'Gross', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'agent', 'transId', 'state', 'customerId', 'gross', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (OrderPeer::ID, OrderPeer::AGENT, OrderPeer::TRANS_ID, OrderPeer::STATE, OrderPeer::CUSTOMER_ID, OrderPeer::GROSS, OrderPeer::CREATED_AT, OrderPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'AGENT', 'TRANS_ID', 'STATE', 'CUSTOMER_ID', 'GROSS', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'agent', 'trans_id', 'state', 'customer_id', 'gross', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -99,12 +102,12 @@ abstract class BaseOrderPeer
      * e.g. OrderPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Agent' => 1, 'TransId' => 2, 'State' => 3, 'CustomerId' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'agent' => 1, 'transId' => 2, 'state' => 3, 'customerId' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
-        BasePeer::TYPE_COLNAME => array (OrderPeer::ID => 0, OrderPeer::AGENT => 1, OrderPeer::TRANS_ID => 2, OrderPeer::STATE => 3, OrderPeer::CUSTOMER_ID => 4, OrderPeer::CREATED_AT => 5, OrderPeer::UPDATED_AT => 6, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'AGENT' => 1, 'TRANS_ID' => 2, 'STATE' => 3, 'CUSTOMER_ID' => 4, 'CREATED_AT' => 5, 'UPDATED_AT' => 6, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'agent' => 1, 'trans_id' => 2, 'state' => 3, 'customer_id' => 4, 'created_at' => 5, 'updated_at' => 6, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Agent' => 1, 'TransId' => 2, 'State' => 3, 'CustomerId' => 4, 'Gross' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'agent' => 1, 'transId' => 2, 'state' => 3, 'customerId' => 4, 'gross' => 5, 'createdAt' => 6, 'updatedAt' => 7, ),
+        BasePeer::TYPE_COLNAME => array (OrderPeer::ID => 0, OrderPeer::AGENT => 1, OrderPeer::TRANS_ID => 2, OrderPeer::STATE => 3, OrderPeer::CUSTOMER_ID => 4, OrderPeer::GROSS => 5, OrderPeer::CREATED_AT => 6, OrderPeer::UPDATED_AT => 7, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'AGENT' => 1, 'TRANS_ID' => 2, 'STATE' => 3, 'CUSTOMER_ID' => 4, 'GROSS' => 5, 'CREATED_AT' => 6, 'UPDATED_AT' => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'agent' => 1, 'trans_id' => 2, 'state' => 3, 'customer_id' => 4, 'gross' => 5, 'created_at' => 6, 'updated_at' => 7, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /** The enumerated values for this table */
@@ -238,6 +241,7 @@ abstract class BaseOrderPeer
             $criteria->addSelectColumn(OrderPeer::TRANS_ID);
             $criteria->addSelectColumn(OrderPeer::STATE);
             $criteria->addSelectColumn(OrderPeer::CUSTOMER_ID);
+            $criteria->addSelectColumn(OrderPeer::GROSS);
             $criteria->addSelectColumn(OrderPeer::CREATED_AT);
             $criteria->addSelectColumn(OrderPeer::UPDATED_AT);
         } else {
@@ -246,6 +250,7 @@ abstract class BaseOrderPeer
             $criteria->addSelectColumn($alias . '.trans_id');
             $criteria->addSelectColumn($alias . '.state');
             $criteria->addSelectColumn($alias . '.customer_id');
+            $criteria->addSelectColumn($alias . '.gross');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
         }

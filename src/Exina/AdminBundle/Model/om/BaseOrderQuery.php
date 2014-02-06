@@ -25,6 +25,7 @@ use Exina\AdminBundle\Model\OrderQuery;
  * @method OrderQuery orderByTransId($order = Criteria::ASC) Order by the trans_id column
  * @method OrderQuery orderByState($order = Criteria::ASC) Order by the state column
  * @method OrderQuery orderByCustomerId($order = Criteria::ASC) Order by the customer_id column
+ * @method OrderQuery orderByGross($order = Criteria::ASC) Order by the gross column
  * @method OrderQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method OrderQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
@@ -33,6 +34,7 @@ use Exina\AdminBundle\Model\OrderQuery;
  * @method OrderQuery groupByTransId() Group by the trans_id column
  * @method OrderQuery groupByState() Group by the state column
  * @method OrderQuery groupByCustomerId() Group by the customer_id column
+ * @method OrderQuery groupByGross() Group by the gross column
  * @method OrderQuery groupByCreatedAt() Group by the created_at column
  * @method OrderQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -59,6 +61,7 @@ use Exina\AdminBundle\Model\OrderQuery;
  * @method Order findOneByTransId(string $trans_id) Return the first Order filtered by the trans_id column
  * @method Order findOneByState(int $state) Return the first Order filtered by the state column
  * @method Order findOneByCustomerId(int $customer_id) Return the first Order filtered by the customer_id column
+ * @method Order findOneByGross(string $gross) Return the first Order filtered by the gross column
  * @method Order findOneByCreatedAt(string $created_at) Return the first Order filtered by the created_at column
  * @method Order findOneByUpdatedAt(string $updated_at) Return the first Order filtered by the updated_at column
  *
@@ -67,6 +70,7 @@ use Exina\AdminBundle\Model\OrderQuery;
  * @method array findByTransId(string $trans_id) Return Order objects filtered by the trans_id column
  * @method array findByState(int $state) Return Order objects filtered by the state column
  * @method array findByCustomerId(int $customer_id) Return Order objects filtered by the customer_id column
+ * @method array findByGross(string $gross) Return Order objects filtered by the gross column
  * @method array findByCreatedAt(string $created_at) Return Order objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return Order objects filtered by the updated_at column
  */
@@ -174,7 +178,7 @@ abstract class BaseOrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `agent`, `trans_id`, `state`, `customer_id`, `created_at`, `updated_at` FROM `basis_order` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `agent`, `trans_id`, `state`, `customer_id`, `gross`, `created_at`, `updated_at` FROM `basis_order` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -432,6 +436,48 @@ abstract class BaseOrderQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(OrderPeer::CUSTOMER_ID, $customerId, $comparison);
+    }
+
+    /**
+     * Filter the query on the gross column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByGross(1234); // WHERE gross = 1234
+     * $query->filterByGross(array(12, 34)); // WHERE gross IN (12, 34)
+     * $query->filterByGross(array('min' => 12)); // WHERE gross >= 12
+     * $query->filterByGross(array('max' => 12)); // WHERE gross <= 12
+     * </code>
+     *
+     * @param     mixed $gross The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrderQuery The current query, for fluid interface
+     */
+    public function filterByGross($gross = null, $comparison = null)
+    {
+        if (is_array($gross)) {
+            $useMinMax = false;
+            if (isset($gross['min'])) {
+                $this->addUsingAlias(OrderPeer::GROSS, $gross['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($gross['max'])) {
+                $this->addUsingAlias(OrderPeer::GROSS, $gross['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrderPeer::GROSS, $gross, $comparison);
     }
 
     /**

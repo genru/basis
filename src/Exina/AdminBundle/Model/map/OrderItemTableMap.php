@@ -46,6 +46,7 @@ class OrderItemTableMap extends TableMap
         $this->addForeignKey('order_id', 'OrderId', 'INTEGER', 'basis_order', 'id', true, null, null);
         $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'basis_product', 'id', true, null, null);
         $this->addColumn('quantity', 'Quantity', 'INTEGER', true, null, null);
+        $this->addColumn('price', 'Price', 'DECIMAL', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         // validators

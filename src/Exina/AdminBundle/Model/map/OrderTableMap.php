@@ -54,6 +54,7 @@ class OrderTableMap extends TableMap
   3 => 'CANCELLED',
 ));
         $this->addForeignKey('customer_id', 'CustomerId', 'INTEGER', 'basis_customer', 'id', true, null, null);
+        $this->addColumn('gross', 'Gross', 'DECIMAL', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         // validators

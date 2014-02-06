@@ -31,13 +31,13 @@ abstract class BaseOrderItemPeer
     const TM_CLASS = 'Exina\\AdminBundle\\Model\\map\\OrderItemTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /** the column name for the id field */
     const ID = 'basis_order_item.id';
@@ -50,6 +50,9 @@ abstract class BaseOrderItemPeer
 
     /** the column name for the quantity field */
     const QUANTITY = 'basis_order_item.quantity';
+
+    /** the column name for the price field */
+    const PRICE = 'basis_order_item.price';
 
     /** the column name for the created_at field */
     const CREATED_AT = 'basis_order_item.created_at';
@@ -76,12 +79,12 @@ abstract class BaseOrderItemPeer
      * e.g. OrderItemPeer::$fieldNames[OrderItemPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'OrderId', 'ProductId', 'Quantity', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'orderId', 'productId', 'quantity', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (OrderItemPeer::ID, OrderItemPeer::ORDER_ID, OrderItemPeer::PRODUCT_ID, OrderItemPeer::QUANTITY, OrderItemPeer::CREATED_AT, OrderItemPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORDER_ID', 'PRODUCT_ID', 'QUANTITY', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'order_id', 'product_id', 'quantity', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'OrderId', 'ProductId', 'Quantity', 'Price', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'orderId', 'productId', 'quantity', 'price', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (OrderItemPeer::ID, OrderItemPeer::ORDER_ID, OrderItemPeer::PRODUCT_ID, OrderItemPeer::QUANTITY, OrderItemPeer::PRICE, OrderItemPeer::CREATED_AT, OrderItemPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORDER_ID', 'PRODUCT_ID', 'QUANTITY', 'PRICE', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'order_id', 'product_id', 'quantity', 'price', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -91,12 +94,12 @@ abstract class BaseOrderItemPeer
      * e.g. OrderItemPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OrderId' => 1, 'ProductId' => 2, 'Quantity' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'orderId' => 1, 'productId' => 2, 'quantity' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
-        BasePeer::TYPE_COLNAME => array (OrderItemPeer::ID => 0, OrderItemPeer::ORDER_ID => 1, OrderItemPeer::PRODUCT_ID => 2, OrderItemPeer::QUANTITY => 3, OrderItemPeer::CREATED_AT => 4, OrderItemPeer::UPDATED_AT => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORDER_ID' => 1, 'PRODUCT_ID' => 2, 'QUANTITY' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'order_id' => 1, 'product_id' => 2, 'quantity' => 3, 'created_at' => 4, 'updated_at' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OrderId' => 1, 'ProductId' => 2, 'Quantity' => 3, 'Price' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'orderId' => 1, 'productId' => 2, 'quantity' => 3, 'price' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
+        BasePeer::TYPE_COLNAME => array (OrderItemPeer::ID => 0, OrderItemPeer::ORDER_ID => 1, OrderItemPeer::PRODUCT_ID => 2, OrderItemPeer::QUANTITY => 3, OrderItemPeer::PRICE => 4, OrderItemPeer::CREATED_AT => 5, OrderItemPeer::UPDATED_AT => 6, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORDER_ID' => 1, 'PRODUCT_ID' => 2, 'QUANTITY' => 3, 'PRICE' => 4, 'CREATED_AT' => 5, 'UPDATED_AT' => 6, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'order_id' => 1, 'product_id' => 2, 'quantity' => 3, 'price' => 4, 'created_at' => 5, 'updated_at' => 6, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -174,6 +177,7 @@ abstract class BaseOrderItemPeer
             $criteria->addSelectColumn(OrderItemPeer::ORDER_ID);
             $criteria->addSelectColumn(OrderItemPeer::PRODUCT_ID);
             $criteria->addSelectColumn(OrderItemPeer::QUANTITY);
+            $criteria->addSelectColumn(OrderItemPeer::PRICE);
             $criteria->addSelectColumn(OrderItemPeer::CREATED_AT);
             $criteria->addSelectColumn(OrderItemPeer::UPDATED_AT);
         } else {
@@ -181,6 +185,7 @@ abstract class BaseOrderItemPeer
             $criteria->addSelectColumn($alias . '.order_id');
             $criteria->addSelectColumn($alias . '.product_id');
             $criteria->addSelectColumn($alias . '.quantity');
+            $criteria->addSelectColumn($alias . '.price');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
         }

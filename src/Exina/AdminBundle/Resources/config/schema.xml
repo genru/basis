@@ -37,6 +37,7 @@
         <column name="trans_id" type="varchar" size="255" primaryString="true"/>
         <column name="state" type="enum" valueSet="PAID,PENDING,REFUNDED,CANCELLED" />
         <column name="customer_id" type="INTEGER" required="true" />
+        <column name="gross" type="DECIMAL" scale="2" required="true" />
         <foreign-key foreignTable="basis_customer">
             <reference local="customer_id" foreign="id"/>
         </foreign-key>
@@ -53,6 +54,7 @@
             <reference local="product_id" foreign="id"/>
         </foreign-key>
         <column name="quantity" type="INTEGER" required="true" />
+        <column name="price" type="DECIMAL" scale="2" required="true" />
     </table>
 
 

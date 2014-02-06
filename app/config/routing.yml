@@ -22,6 +22,7 @@ fos_user_change_password:
     prefix: /profile
 
 # http://{{YOUR DOMAIN}}/ipn/ipn-no-notification
+# http://{{YOUR DOMAIN}}/ipn/ipn-twig-email-notification
 OrderlyPayPalIpnBundleNoEmail:
     resource: "@OrderlyPayPalIpnBundle/Controller/NoNotificationController.php"
     type:     annotation
