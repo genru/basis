@@ -26,7 +26,7 @@ class DefaultController extends Controller
         foreach($monthlyOrders as $order)
         {
             $monthly['array'][] = $order->getGross();
-            $monthly['sum'] = $monthly['sum']+$order->getGross();
+            $monthly['sum'] += $order->getGross();
         }
 
         $weeklyOrders = OrderQuery::create()
@@ -39,7 +39,7 @@ class DefaultController extends Controller
         foreach($weeklyOrders as $order)
         {
             $weekly['array'][] = $order->getGross();
-            $weekly['sum'] = $weekly['sum']+$order->getGross();
+            $weekly['sum'] += $order->getGross();
         }
 
         $weekly_sale = array(2,4,9,7,12,8,16);

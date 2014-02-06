@@ -40,6 +40,7 @@ class PayPalListener {
         else
             $order->setState(OrderPeer::STATE_PENDING);
         $order->setCustomer($customer);
+        $order->setGross($ipnOrder->getMcGross());
 
         foreach ($items as $item) {
             # code...
