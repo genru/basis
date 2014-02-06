@@ -1,6 +1,9 @@
 exina_admin_homepage:
     pattern:  /
     defaults: { _controller: ExinaAdminBundle:Default:index }
+exina_admin_dashboard:
+    pattern:  /dashboard
+    defaults: { _controller: ExinaAdminBundle:Default:charts }
 ex_admin_key_home:
     pattern: /key/
     defaults: {_controller: ExinaAdminBundle:Key:list }

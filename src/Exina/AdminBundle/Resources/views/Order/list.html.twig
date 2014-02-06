@@ -50,7 +50,17 @@ Orders
         <tbody>
             {% for order in orders %}
                 <tr>
-                    <td><a href="{{path('ex_admin_order_update', {'id':order.id})}}" title="see details"> {{order.transid}}</a></td>
+                    <td>
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{order.transid}} <i class="icon-angle-down"></i></a>
+                            <ul class="dropdown-menu">
+                              <li><a href="{{path('ex_admin_order_update', {'id':order.id})}}"><i class="icon-info-sign"></i> View</a></li>
+                              <li><a href="{{path('ex_admin_order_delete', {'id':order.id})}}"><i class="icon-remove"></i> Delete</a></li>
+                            </ul>
+                        </div>
+
+                        {# <a href="{{path('ex_admin_order_update', {'id':order.id})}}" title="see details"> {{order.transid}}</a> #}
+                    </td>
                     <td> {{order.orderitems[0].product.name}}</td>
                     <td>
                         {{order.agent}}

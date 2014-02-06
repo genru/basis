@@ -27,7 +27,7 @@ class PayPalListener {
         $items = $ipn->getOrderItems();
 
         $customer = new Customer();
-        $customer->setName($ipnOrder->getAddressName());
+        $customer->setName($ipnOrder->getFirstName().' '.$ipnOrder->getLastName());
         $customer->setEmail($ipnOrder->getPayerEmail());
         $customer->setOrganization($ipnOrder->getPayerBusinessName());
         // $customer->save();
