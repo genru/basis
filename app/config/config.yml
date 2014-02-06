@@ -97,6 +97,12 @@ orderly_pay_pal_ipn:
     sandbox_url:     https://www.sandbox.paypal.com/cgi-bin/webscr
     sandbox_debug:   true
 
+    sandbox_proxy:       ~
+    sandbox_response:    VERIFIED
+    sandbox_pdttoken:    pdt-token
+    sandbox_pdtresponse:
+        payment_status: Completed
+        mc_gross: 123.00
     drivers:
         orm:
             object_manager: doctrine.orm.entity_manager
