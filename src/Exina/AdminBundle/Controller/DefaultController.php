@@ -4,6 +4,9 @@ namespace Exina\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Exina\AdminBundle\Model\Order;
+use Exina\AdminBundle\Model\OrderQuery;
+
 class DefaultController extends Controller
 {
     public function indexAction()
@@ -13,10 +16,34 @@ class DefaultController extends Controller
 
     public function chartsAction()
     {
+        $monthlyOrders = OrderQuery::create()
+            ->filterByCreatedAt(array('min' => time() - 30 * 24 * 60 * 60))
+            ->orderByCreatedAt()
+            ->find();
+        $monthly = array();
+        $monthly['sum'] = 0;
+        $monthly['array'] = array();
+        foreach($monthlyOrders as $order)
+        {
+            $monthly['array'][] = $order->getGross();
+            $monthly['sum'] = $monthly['sum']+$order->getGross();
+        }
+
+        $weeklyOrders = OrderQuery::create()
+            ->filterByCreatedAt(array('min' => time() - 7 * 24 * 60 * 60))
+            ->orderByCreatedAt()
+            ->find();
+        $weekly = array();
+        $weekly['sum'] = 0;
+        $weekly['array'] = array();
+        foreach($weeklyOrders as $order)
+        {
+            $weekly['array'][] = $order->getGross();
+            $weekly['sum'] = $weekly['sum']+$order->getGross();
+        }
+
         $weekly_sale = array(2,4,9,7,12,8,16);
         $weekly_sum = 345800;
-        $monthly_sale = array(20,15,18,14,10,13,9,7,6,8,3,11,11,13,6,24,10,8,9,13,11,6,10,11,9,10,6,16,10,6,9,9);
-        $monthly_sum = 4356743;
-        return $this->render('ExinaAdminBundle:Default:index.html.twig', array('weekly_sale' => $weekly_sale, 'monthly_sale' => $monthly_sale, 'weekly_sum' => $weekly_sum, 'monthly_sum' => $monthly_sum));
+        return $this->render('ExinaAdminBundle:Default:index.html.twig', array('weekly' => $weekly, 'monthly'=>$monthly));
     }
 }

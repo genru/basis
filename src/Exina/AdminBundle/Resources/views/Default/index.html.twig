@@ -9,17 +9,17 @@ Dashboard
         <div class="span12 tac">
             <ul class="ov_boxes">
                 <li>
-                    <div class="p_bar_up p_canvas">{{weekly_sale|join(',')}}</div>
+                    <div class="p_bar_up p_canvas">{{weekly['array']|join(',')}}</div>
                     <div class="ov_text">
-                        <strong>${{weekly_sum|number_format}}</strong>
-                        Weekly Sale
+                        <strong>${{weekly['sum']|number_format}}</strong>
+                        Last 7-day Sale
                     </div>
                 </li>
                 <li>
-                    <div class="p_line_up p_canvas">{{monthly_sale|join(',')}}</div>
+                    <div class="p_line_up p_canvas">{{monthly['array']|join(',')}}</div>
                     <div class="ov_text">
-                        <strong>${{monthly_sum|number_format}}</strong>
-                        Monthly Sale
+                        <strong>${{monthly['sum']|number_format}}</strong>
+                        Last 30-day Sale
                     </div>
                 </li>
                 <li>
