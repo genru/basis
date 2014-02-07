@@ -40,11 +40,11 @@ class OrderController extends Controller
             $errors[] = array('message'=>'No data');
         }
 
-        return new JsonResponse([
+        return new JsonResponse(array(
             'ok' => $errors == null,
             'error'=>$errors,
             'data' => $allOrder->toArray()
-        ]);
+        ));
     }
 
     public function createAction(Request $request)
