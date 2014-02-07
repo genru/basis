@@ -21,6 +21,7 @@ use Exina\AdminBundle\Model\Order;
  * @method CustomerQuery orderById($order = Criteria::ASC) Order by the id column
  * @method CustomerQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method CustomerQuery orderByEmail($order = Criteria::ASC) Order by the email column
+ * @method CustomerQuery orderByCountry($order = Criteria::ASC) Order by the country column
  * @method CustomerQuery orderByOrganization($order = Criteria::ASC) Order by the organization column
  * @method CustomerQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method CustomerQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
@@ -28,6 +29,7 @@ use Exina\AdminBundle\Model\Order;
  * @method CustomerQuery groupById() Group by the id column
  * @method CustomerQuery groupByName() Group by the name column
  * @method CustomerQuery groupByEmail() Group by the email column
+ * @method CustomerQuery groupByCountry() Group by the country column
  * @method CustomerQuery groupByOrganization() Group by the organization column
  * @method CustomerQuery groupByCreatedAt() Group by the created_at column
  * @method CustomerQuery groupByUpdatedAt() Group by the updated_at column
@@ -45,6 +47,7 @@ use Exina\AdminBundle\Model\Order;
  *
  * @method Customer findOneByName(string $name) Return the first Customer filtered by the name column
  * @method Customer findOneByEmail(string $email) Return the first Customer filtered by the email column
+ * @method Customer findOneByCountry(string $country) Return the first Customer filtered by the country column
  * @method Customer findOneByOrganization(string $organization) Return the first Customer filtered by the organization column
  * @method Customer findOneByCreatedAt(string $created_at) Return the first Customer filtered by the created_at column
  * @method Customer findOneByUpdatedAt(string $updated_at) Return the first Customer filtered by the updated_at column
@@ -52,6 +55,7 @@ use Exina\AdminBundle\Model\Order;
  * @method array findById(int $id) Return Customer objects filtered by the id column
  * @method array findByName(string $name) Return Customer objects filtered by the name column
  * @method array findByEmail(string $email) Return Customer objects filtered by the email column
+ * @method array findByCountry(string $country) Return Customer objects filtered by the country column
  * @method array findByOrganization(string $organization) Return Customer objects filtered by the organization column
  * @method array findByCreatedAt(string $created_at) Return Customer objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return Customer objects filtered by the updated_at column
@@ -160,7 +164,7 @@ abstract class BaseCustomerQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `email`, `organization`, `created_at`, `updated_at` FROM `basis_customer` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `name`, `email`, `country`, `organization`, `created_at`, `updated_at` FROM `basis_customer` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -347,6 +351,35 @@ abstract class BaseCustomerQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CustomerPeer::EMAIL, $email, $comparison);
+    }
+
+    /**
+     * Filter the query on the country column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCountry('fooValue');   // WHERE country = 'fooValue'
+     * $query->filterByCountry('%fooValue%'); // WHERE country LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $country The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CustomerQuery The current query, for fluid interface
+     */
+    public function filterByCountry($country = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($country)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $country)) {
+                $country = str_replace('*', '%', $country);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(CustomerPeer::COUNTRY, $country, $comparison);
     }
 
     /**

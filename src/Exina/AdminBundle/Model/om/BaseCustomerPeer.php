@@ -29,13 +29,13 @@ abstract class BaseCustomerPeer
     const TM_CLASS = 'Exina\\AdminBundle\\Model\\map\\CustomerTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /** the column name for the id field */
     const ID = 'basis_customer.id';
@@ -45,6 +45,9 @@ abstract class BaseCustomerPeer
 
     /** the column name for the email field */
     const EMAIL = 'basis_customer.email';
+
+    /** the column name for the country field */
+    const COUNTRY = 'basis_customer.country';
 
     /** the column name for the organization field */
     const ORGANIZATION = 'basis_customer.organization';
@@ -74,12 +77,12 @@ abstract class BaseCustomerPeer
      * e.g. CustomerPeer::$fieldNames[CustomerPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Email', 'Organization', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'email', 'organization', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (CustomerPeer::ID, CustomerPeer::NAME, CustomerPeer::EMAIL, CustomerPeer::ORGANIZATION, CustomerPeer::CREATED_AT, CustomerPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'EMAIL', 'ORGANIZATION', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'email', 'organization', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Email', 'Country', 'Organization', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'email', 'country', 'organization', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (CustomerPeer::ID, CustomerPeer::NAME, CustomerPeer::EMAIL, CustomerPeer::COUNTRY, CustomerPeer::ORGANIZATION, CustomerPeer::CREATED_AT, CustomerPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'EMAIL', 'COUNTRY', 'ORGANIZATION', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'email', 'country', 'organization', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -89,12 +92,12 @@ abstract class BaseCustomerPeer
      * e.g. CustomerPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Email' => 2, 'Organization' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'email' => 2, 'organization' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
-        BasePeer::TYPE_COLNAME => array (CustomerPeer::ID => 0, CustomerPeer::NAME => 1, CustomerPeer::EMAIL => 2, CustomerPeer::ORGANIZATION => 3, CustomerPeer::CREATED_AT => 4, CustomerPeer::UPDATED_AT => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'EMAIL' => 2, 'ORGANIZATION' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'email' => 2, 'organization' => 3, 'created_at' => 4, 'updated_at' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Email' => 2, 'Country' => 3, 'Organization' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'email' => 2, 'country' => 3, 'organization' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
+        BasePeer::TYPE_COLNAME => array (CustomerPeer::ID => 0, CustomerPeer::NAME => 1, CustomerPeer::EMAIL => 2, CustomerPeer::COUNTRY => 3, CustomerPeer::ORGANIZATION => 4, CustomerPeer::CREATED_AT => 5, CustomerPeer::UPDATED_AT => 6, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'EMAIL' => 2, 'COUNTRY' => 3, 'ORGANIZATION' => 4, 'CREATED_AT' => 5, 'UPDATED_AT' => 6, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'email' => 2, 'country' => 3, 'organization' => 4, 'created_at' => 5, 'updated_at' => 6, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -171,6 +174,7 @@ abstract class BaseCustomerPeer
             $criteria->addSelectColumn(CustomerPeer::ID);
             $criteria->addSelectColumn(CustomerPeer::NAME);
             $criteria->addSelectColumn(CustomerPeer::EMAIL);
+            $criteria->addSelectColumn(CustomerPeer::COUNTRY);
             $criteria->addSelectColumn(CustomerPeer::ORGANIZATION);
             $criteria->addSelectColumn(CustomerPeer::CREATED_AT);
             $criteria->addSelectColumn(CustomerPeer::UPDATED_AT);
@@ -178,6 +182,7 @@ abstract class BaseCustomerPeer
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.email');
+            $criteria->addSelectColumn($alias . '.country');
             $criteria->addSelectColumn($alias . '.organization');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');

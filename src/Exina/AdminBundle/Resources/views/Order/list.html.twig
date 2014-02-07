@@ -44,6 +44,7 @@ Orders
             <th>agent</th>
             <th>state</th>
             <th>customer</th>
+            <th>total</th>
             <th>create at</th>
         </tr>
         </thead>
@@ -69,6 +70,7 @@ Orders
                         {{order.state}}
                     </td>
                     <td><a href="{{path('ex_admin_customer_update', {'id':order.customer.id})}}" title="see details">{{order.customer}}</a></td>
+                    <td>${{order.gross|number_format(2)}}</td>
                     <td>{{ order.CreatedAt('Y-m-d H:m:i') }}</td>
                 </tr>
             {% endfor %}

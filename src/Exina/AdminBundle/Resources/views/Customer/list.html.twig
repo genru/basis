@@ -42,6 +42,7 @@ Customers
             <th>name</th>
             <th>email</th>
             <th>organization</th>
+            <th>country</th>
             <th>create at</th>
         </tr>
         </thead>
@@ -55,6 +56,7 @@ Customers
                     <td>
                         {{customer.organization}}
                     </td>
+                    <td>{{customer.country}}</td>
                     <td>{{ customer.CreatedAt('Y-m-d H:m:i') }}</td>
                 </tr>
             {% endfor %}

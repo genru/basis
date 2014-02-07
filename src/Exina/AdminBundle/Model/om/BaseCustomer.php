@@ -61,6 +61,12 @@ abstract class BaseCustomer extends BaseObject implements Persistent
     protected $email;
 
     /**
+     * The value for the country field.
+     * @var        string
+     */
+    protected $country;
+
+    /**
      * The value for the organization field.
      * @var        string
      */
@@ -141,6 +147,17 @@ abstract class BaseCustomer extends BaseObject implements Persistent
     {
 
         return $this->email;
+    }
+
+    /**
+     * Get the [country] column value.
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+
+        return $this->country;
     }
 
     /**
@@ -298,6 +315,27 @@ abstract class BaseCustomer extends BaseObject implements Persistent
     } // setEmail()
 
     /**
+     * Set the value of [country] column.
+     *
+     * @param  string $v new value
+     * @return Customer The current object (for fluent API support)
+     */
+    public function setCountry($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->country !== $v) {
+            $this->country = $v;
+            $this->modifiedColumns[] = CustomerPeer::COUNTRY;
+        }
+
+
+        return $this;
+    } // setCountry()
+
+    /**
      * Set the value of [organization] column.
      *
      * @param  string $v new value
@@ -399,9 +437,10 @@ abstract class BaseCustomer extends BaseObject implements Persistent
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->email = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->organization = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->country = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->organization = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->created_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->updated_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -411,7 +450,7 @@ abstract class BaseCustomer extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 6; // 6 = CustomerPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = CustomerPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Customer object", $e);
@@ -662,6 +701,9 @@ abstract class BaseCustomer extends BaseObject implements Persistent
         if ($this->isColumnModified(CustomerPeer::EMAIL)) {
             $modifiedColumns[':p' . $index++]  = '`email`';
         }
+        if ($this->isColumnModified(CustomerPeer::COUNTRY)) {
+            $modifiedColumns[':p' . $index++]  = '`country`';
+        }
         if ($this->isColumnModified(CustomerPeer::ORGANIZATION)) {
             $modifiedColumns[':p' . $index++]  = '`organization`';
         }
@@ -690,6 +732,9 @@ abstract class BaseCustomer extends BaseObject implements Persistent
                         break;
                     case '`email`':
                         $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
+                        break;
+                    case '`country`':
+                        $stmt->bindValue($identifier, $this->country, PDO::PARAM_STR);
                         break;
                     case '`organization`':
                         $stmt->bindValue($identifier, $this->organization, PDO::PARAM_STR);
@@ -852,12 +897,15 @@ abstract class BaseCustomer extends BaseObject implements Persistent
                 return $this->getEmail();
                 break;
             case 3:
-                return $this->getOrganization();
+                return $this->getCountry();
                 break;
             case 4:
-                return $this->getCreatedAt();
+                return $this->getOrganization();
                 break;
             case 5:
+                return $this->getCreatedAt();
+                break;
+            case 6:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -892,9 +940,10 @@ abstract class BaseCustomer extends BaseObject implements Persistent
             $keys[0] => $this->getId(),
             $keys[1] => $this->getName(),
             $keys[2] => $this->getEmail(),
-            $keys[3] => $this->getOrganization(),
-            $keys[4] => $this->getCreatedAt(),
-            $keys[5] => $this->getUpdatedAt(),
+            $keys[3] => $this->getCountry(),
+            $keys[4] => $this->getOrganization(),
+            $keys[5] => $this->getCreatedAt(),
+            $keys[6] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -949,12 +998,15 @@ abstract class BaseCustomer extends BaseObject implements Persistent
                 $this->setEmail($value);
                 break;
             case 3:
-                $this->setOrganization($value);
+                $this->setCountry($value);
                 break;
             case 4:
-                $this->setCreatedAt($value);
+                $this->setOrganization($value);
                 break;
             case 5:
+                $this->setCreatedAt($value);
+                break;
+            case 6:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -984,9 +1036,10 @@ abstract class BaseCustomer extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setEmail($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setOrganization($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
+        if (array_key_exists($keys[3], $arr)) $this->setCountry($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setOrganization($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setCreatedAt($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setUpdatedAt($arr[$keys[6]]);
     }
 
     /**
@@ -1001,6 +1054,7 @@ abstract class BaseCustomer extends BaseObject implements Persistent
         if ($this->isColumnModified(CustomerPeer::ID)) $criteria->add(CustomerPeer::ID, $this->id);
         if ($this->isColumnModified(CustomerPeer::NAME)) $criteria->add(CustomerPeer::NAME, $this->name);
         if ($this->isColumnModified(CustomerPeer::EMAIL)) $criteria->add(CustomerPeer::EMAIL, $this->email);
+        if ($this->isColumnModified(CustomerPeer::COUNTRY)) $criteria->add(CustomerPeer::COUNTRY, $this->country);
         if ($this->isColumnModified(CustomerPeer::ORGANIZATION)) $criteria->add(CustomerPeer::ORGANIZATION, $this->organization);
         if ($this->isColumnModified(CustomerPeer::CREATED_AT)) $criteria->add(CustomerPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(CustomerPeer::UPDATED_AT)) $criteria->add(CustomerPeer::UPDATED_AT, $this->updated_at);
@@ -1069,6 +1123,7 @@ abstract class BaseCustomer extends BaseObject implements Persistent
     {
         $copyObj->setName($this->getName());
         $copyObj->setEmail($this->getEmail());
+        $copyObj->setCountry($this->getCountry());
         $copyObj->setOrganization($this->getOrganization());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -1385,6 +1440,7 @@ abstract class BaseCustomer extends BaseObject implements Persistent
         $this->id = null;
         $this->name = null;
         $this->email = null;
+        $this->country = null;
         $this->organization = null;
         $this->created_at = null;
         $this->updated_at = null;

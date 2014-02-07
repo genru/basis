@@ -46,6 +46,7 @@ class CustomerTableMap extends TableMap
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
         $this->getColumn('name', false)->setPrimaryString(true);
         $this->addColumn('email', 'Email', 'VARCHAR', false, 255, null);
+        $this->addColumn('country', 'Country', 'VARCHAR', false, 80, null);
         $this->addColumn('organization', 'Organization', 'VARCHAR', false, 255, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);

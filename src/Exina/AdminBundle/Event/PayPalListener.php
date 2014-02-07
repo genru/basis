@@ -30,6 +30,7 @@ class PayPalListener {
         $customer->setName($ipnOrder->getFirstName().' '.$ipnOrder->getLastName());
         $customer->setEmail($ipnOrder->getPayerEmail());
         $customer->setOrganization($ipnOrder->getPayerBusinessName());
+        $customer->setCountry($ipnOrder->getAddressCountry());
         // $customer->save();
 
         $order = new Order();
