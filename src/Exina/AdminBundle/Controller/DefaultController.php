@@ -16,6 +16,7 @@ class DefaultController extends Controller
 
     public function chartsAction()
     {
+        # last 30 days orders
         $monthlyOrders = OrderQuery::create()
             ->filterByCreatedAt(array('min' => time() - 30 * 24 * 60 * 60))
             ->orderByCreatedAt()
@@ -29,6 +30,7 @@ class DefaultController extends Controller
             $monthly['sum'] += $order->getGross();
         }
 
+        # last 7 days orders
         $weeklyOrders = OrderQuery::create()
             ->filterByCreatedAt(array('min' => time() - 7 * 24 * 60 * 60))
             ->orderByCreatedAt()
@@ -42,8 +44,6 @@ class DefaultController extends Controller
             $weekly['sum'] += $order->getGross();
         }
 
-        $weekly_sale = array(2,4,9,7,12,8,16);
-        $weekly_sum = 345800;
         return $this->render('ExinaAdminBundle:Default:index.html.twig', array('weekly' => $weekly, 'monthly'=>$monthly));
     }
 }

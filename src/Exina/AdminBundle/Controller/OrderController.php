@@ -4,6 +4,7 @@ namespace Exina\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Exina\AdminBundle\Model\Order;
 use Exina\AdminBundle\Model\OrderPeer;
 use Exina\AdminBundle\Model\OrderQuery;
@@ -11,6 +12,11 @@ use Exina\AdminBundle\Form\Type\OrderType;
 
 class OrderController extends Controller
 {
+    public function indexAction()
+    {
+        return $this->redirect($this->generateUrl('ex_admin_order_list'));
+    }
+
     public function listAction()
     {
         $errors = null;
@@ -22,6 +28,23 @@ class OrderController extends Controller
         }
 
         return $this->render('ExinaAdminBundle:Order:list.html.twig', array('orders'=>$allOrder, 'errors'=>$errors));
+    }
+
+    public function jsonListAction()
+    {
+        $errors = null;
+        $allOrder = OrderQuery::create()
+            ->find();
+        if($allOrder===null) {
+            $errors = array();
+            $errors[] = array('message'=>'No data');
+        }
+
+        return new JsonResponse([
+            'ok' => $errors == null,
+            'error'=>$errors,
+            'data' => $allOrder->toArray()
+        ]);
     }
 
     public function createAction(Request $request)

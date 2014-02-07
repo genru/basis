@@ -8,7 +8,7 @@ ex_admin_key_home:
     pattern: /key/
     defaults: {_controller: ExinaAdminBundle:Key:list }
 ex_admin_key_list:
-    pattern: /key/
+    pattern: /key/list
     defaults: {_controller: ExinaAdminBundle:Key:list }
 ex_admin_key_new:
     pattern: /key/new
@@ -28,7 +28,7 @@ ex_admin_product_home:
     pattern: /product/
     defaults: {_controller: ExinaAdminBundle:Product:list }
 ex_admin_product_list:
-    pattern: /product/
+    pattern: /product/list
     defaults: {_controller: ExinaAdminBundle:Product:list }
 ex_admin_product_new:
     pattern: /product/new
@@ -48,7 +48,7 @@ ex_admin_customer_home:
     pattern: /customer/
     defaults: {_controller: ExinaAdminBundle:Customer:list }
 ex_admin_customer_list:
-    pattern: /customer/
+    pattern: /customer/list
     defaults: {_controller: ExinaAdminBundle:Customer:list }
 ex_admin_customer_new:
     pattern: /customer/new
@@ -66,9 +66,9 @@ ex_admin_customer_delete:
 
 ex_admin_order_home:
     pattern: /order/
-    defaults: {_controller: ExinaAdminBundle:Order:list }
+    defaults: {_controller: ExinaAdminBundle:Order:index }
 ex_admin_order_list:
-    pattern: /order/
+    pattern: /order/list
     defaults: {_controller: ExinaAdminBundle:Order:list }
 ex_admin_order_new:
     pattern: /order/new
@@ -83,12 +83,15 @@ ex_admin_order_delete:
     defaults: { _controller: ExinaAdminBundle:Order:delete }
     requirements:
         id: \d+
+ex_admin_order_list_json:
+    pattern: /order/list/json
+    defaults: { _controller: ExinaAdminBundle:Order:jsonList }
 
 ex_admin_host_home:
     pattern: /host/
     defaults: {_controller: ExinaAdminBundle:Host:list }
 ex_admin_host_list:
-    pattern: /host/
+    pattern: /host/list
     defaults: {_controller: ExinaAdminBundle:Host:list }
 ex_admin_host_new:
     pattern: /host/new
