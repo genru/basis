@@ -48,7 +48,6 @@ class KeyController extends Controller
                 'errors'     => $errors,
                 'key'       => $key,
                 ));
-
     }
 
     public function updateAction(Request $request, $id)

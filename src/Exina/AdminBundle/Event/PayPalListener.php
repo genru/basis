@@ -11,6 +11,10 @@ use Exina\AdminBundle\Model\OrderItem;
 use Exina\AdminBundle\Model\Product;
 use Exina\AdminBundle\Model\ProductQuery;
 
+use Exina\AdminBundle\Model\Key;
+use Exina\AdminBundle\Model\KeyPeer;
+use Exina\AdminBundle\Model\KeyQuery;
+
 class PayPalListener {
 
     private $om;
@@ -52,5 +56,14 @@ class PayPalListener {
             $orderItem->setQuantity($item->getQuantity());
             $orderItem->save();
         }
+
+        // assgin key for a order
+        $product = ProductQuery::create()->findPk($items[0]->getItemNumber());
+        $EMPTY_ORDER = new Order();
+        $key = KeyQuery::create()
+            ->filterByProduct($product)
+            ->filterByProduct($EMPTY_ORDER)
+            ->findOne();
+        $order->setProductKey($key);
     }
 }
