@@ -4,7 +4,7 @@ namespace Exina\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Exina\AdminBundle\Model\Host;
 use Exina\AdminBundle\Model\HostQuery;
 use Exina\AdminBundle\Model\Key;
@@ -20,35 +20,35 @@ class LicenseController extends Controller
         // 1) find host
         $host = HostQuery::create()->findOneByFingerprint($fingerprint);
         // 1.1 create it if no found
-        if($host==null)
+        if($host===null)
             $host = new Host();
         $host->setFingerprint($fingerprint);
 
         // 2) find ky
         $key = KeyQuery::create()->findOneByProductKey($keyStr);
         // 2.2 return error if no found
-        if($key==null)
-            return new Response("Invalid key", 404);
+        if($key===null)
+            return new JsonResponse("Invalid key", 404);
 
         // 3) check if paied
         if($key->getOrder()==null)
-            return new Response("Not pay", 402);
+            return new JsonResponse("Not pay", 402);
 
         // 4) check key's bind host. if not empty, return erro
         $kHost = $key->getHost();
-        if($kHost != null)
+        if($kHost !== null)
         {
             if($fingerprint===$kHost->getFingerprint())
-                return new Response("actived on this machine already", 429);
+                return new JsonResponse("actived on this machine already", 201);
             else
-                return new Response("actived by other already", 400);
+                return new JsonResponse("actived by other already", 400);
         }
 
-        // 4) bind key and host
+        // 5) bind key and host
         $key->setHost($host);
         $key->save();
 
-        return new Response("OK");
+        return new JsonResponse("OK");
     }
 
     public function statusAction(Request $request)
@@ -60,23 +60,23 @@ class LicenseController extends Controller
         $key = KeyQuery::create()->findOneByProductKey($keyStr);
         // 1.1 return error if no found
         if($key==null)
-            return new Response("Invalid key", 404);
+            return new JsonResponse("Invalid key", 404);
 
         // 2) check if paied
         if($key->getOrder()==null)
-            return new Response("Not pay", 402);
+            return new JsonResponse("Not pay", 402);
 
         // 3) check key's bind host. if not empty, return erro
         $kHost = $key->getHost();
         if($kHost != null)
         {
             if($fingerprint===$kHost->getFingerprint())
-                return new Response("successful", 200);      // bind already
+                return new JsonResponse("successful", 200);      // bind already
             else
-                return new Response("actived by other already", 400);   // not good
+                return new JsonResponse("actived by other already", 400);   // not good
         }
 
-        return new Response("Not active still", 200);
+        return new JsonResponse("Not active still", 200);
     }
 
 }

@@ -50,6 +50,7 @@ CREATE TABLE `basis_customer`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255),
     `email` VARCHAR(255),
+    `country` VARCHAR(80),
     `organization` VARCHAR(255),
     `created_at` DATETIME,
     `updated_at` DATETIME,
@@ -69,12 +70,11 @@ CREATE TABLE `basis_order`
     `trans_id` VARCHAR(255),
     `state` TINYINT,
     `customer_id` INTEGER NOT NULL,
-    `product_id` INTEGER NOT NULL,
+    `gross` DECIMAL NOT NULL,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`id`),
-    INDEX `basis_order_FI_1` (`customer_id`),
-    INDEX `basis_order_FI_2` (`product_id`)
+    INDEX `basis_order_FI_1` (`customer_id`)
 ) ENGINE=MyISAM;
 
 -- ---------------------------------------------------------------------
@@ -88,6 +88,8 @@ CREATE TABLE `basis_order_item`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `order_id` INTEGER NOT NULL,
     `product_id` INTEGER NOT NULL,
+    `quantity` INTEGER NOT NULL,
+    `price` DECIMAL NOT NULL,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`id`),
