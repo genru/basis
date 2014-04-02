@@ -21,3 +21,8 @@ monolog:
             type:  stream
             path:  %kernel.logs_dir%/%kernel.environment%.log
             level: debug
+
+orderly_pay_pal_ipn:
+    # ... Rest of the configuration
+    # If set to false then service loads settings with "sandbox_" prefix
+    islive:  true
